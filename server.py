@@ -1,7 +1,21 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from aiohttp import web
 import socketio
+from enum import Enum
+import random, json
+
+class Object:
+    def __init__(self, type, x, y):
+        self.type = type
+        self.x = round(x)
+        self.y = round(y)
+
+    def getDict(self):
+        # return json.dumps(self.__dict__)
+        # return str(self.__dict__)
+        return self.__dict__
+        # return vars(self)
 
 sio = socketio.AsyncServer()
 app = web.Application()
@@ -14,6 +28,9 @@ async def index(request):
 @sio.event
 async def connect(sid, environ):
     print('Client connected ' + sid)
+    await sio.emit('objects', json.dumps([object.getDict() for object in objects]), to=sid)
+    # print([object.jsonify() for object in objects])
+    await sio.emit('ping', 'pong')
 
 @sio.event
 async def disconnect(sid):
@@ -23,4 +40,18 @@ app.router.add_get('/', index)
 app.router.add_static('/', './public')
 
 if __name__ == '__main__':
+    # ObjectTypes = Enum('ObjectTypes', 'tree stone iron ruby')
+    OBJECT_TYPES = ['tree', 'stone', 'iron', 'ruby']
+
+    objects = []
+    for i in range(0, 10):
+        objects.append(Object(
+            random.choice(OBJECT_TYPES),
+            random.uniform(-50, 50),
+            random.uniform(-50, 50)
+        ))
+
+    for object in objects:
+        print(object.getDict())
+
     web.run_app(app, port=4000)

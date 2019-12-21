@@ -8,56 +8,68 @@ const FRAME_RATE_ESTIMATE = 60;
 
 let inputs = [];
 
-let resources = {
-    WOOD : 0,
-    STONE : 1,
-    METAL : 2,
-    RUBY : 3
+let objects = [];
+
+// Javascript doesn't have enums so...
+let ObjectTypes = {
+    WOOD: 0,
+    STONE: 1,
+    METAL: 2,
+    RUBY: 3
 };
 
 let objectCache = [
     {
-        name : 'WOOD-RESOURCE',
-        url : 'assets/img/TreeResource.png',
-        resource : resources.WOOD,
-        img : null,
-        object_size : 300
+        name: 'WOOD-RESOURCE',
+        url: 'assets/img/TreeResource.png',
+        resource: ObjectTypes.WOOD,
+        img: null,
+        object_size: 300
     },
     {
-        name : 'STONE-RESOURCE',
-        url : 'assets/img/StoneResource.png',
-        resource : resources.STONE,
-        img : null,
-        object_size : 150
+        name: 'STONE-RESOURCE',
+        url: 'assets/img/StoneResource.png',
+        resource: ObjectTypes.STONE,
+        img: null,
+        object_size: 150
     },
     {
-        name : 'METAL-RESOURCE',
-        url : 'assets/img/MetalResource.png',
-        resource : resources.METAL,
-        img : null,
-        object_size : 150
+        name: 'METAL-RESOURCE',
+        url: 'assets/img/MetalResource.png',
+        resource: ObjectTypes.METAL,
+        img: null,
+        object_size: 150
     },
     {
-        name : 'RUBY-RESOURCE',
-        url : 'assets/img/RubyResource.png',
-        resource : resources.RUBY,
-        img : null,
-        object_size : 150
+        name: 'RUBY-RESOURCE',
+        url: 'assets/img/RubyResource.png',
+        resource: ObjectTypes.RUBY,
+        img: null,
+        object_size: 150
     }
 ];
-
-
 
 let deltaTime;
 let lagModifier;
 
 let player = {
-    x : 0,
-    y : 0,
-    name : "Red",
-    view : 0
+    x: 0,
+    y: 0,
+    name: "Red",
+    view: 0
 };
 
+socket.on('ping', function (data) {
+    console.log(data)
+});
+
+socket.on('objects', function (data) {
+    console.log('objects recieved');
+
+    let parsedData = JSON.parse(data);
+    console.log(parsedData);
+    objects = parsedData;
+});
 
 function keyPressed() {
     inputs.push(key);
@@ -71,7 +83,7 @@ function keyReleased() {
 function preload() {
     for (let i = 0; i < objectCache.length; i++) {
         objectCache[i].img = loadImage(objectCache[i].url);
-        console.log ('Loading Object :' + objectCache[i].name);
+        console.log('Loading Object :' + objectCache[i].name);
     }
 }
 
@@ -80,8 +92,8 @@ function setup() {
 }
 
 function update() {
-    deltaTime = 1/frameRate();
-    lagModifier = deltaTime*FRAME_RATE_ESTIMATE;
+    deltaTime = 1 / frameRate();
+    lagModifier = deltaTime * FRAME_RATE_ESTIMATE;
     // Move Player
     if (inputs.includes('w')) {
         player.y -= PLAYER_SPEED * lagModifier;
@@ -100,6 +112,10 @@ function update() {
 function draw() {
     update();
 
+    // for (object in objects) {
+    //     circle(object.x, object.y, 30);
+    // }
+
     strokeWeight(4);
     background(120, 150, 70);
 
@@ -110,7 +126,7 @@ function draw() {
     let gridOffsetY = 100 - player.y % 100;
 
     for (let i = -1; i < SCREEN_WIDTH / 100 + 1; i++) {
-        line( i * 100 + gridOffsetX, 0 , i * 100 + gridOffsetX, SCREEN_HEIGHT);
+        line(i * 100 + gridOffsetX, 0, i * 100 + gridOffsetX, SCREEN_HEIGHT);
     }
     for (let i = -1; i < SCREEN_HEIGHT / 80 + 1; i++) {
         line(0, i * 100 + gridOffsetY, SCREEN_WIDTH, i * 100 + gridOffsetY);
@@ -126,22 +142,22 @@ function draw() {
     translate(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
     rotate(angle);
 
-    ellipse(26,26,24,24);
-    ellipse(26,-26,24,24);
+    ellipse(26, 26, 24, 24);
+    ellipse(26, -26, 24, 24);
 
     pop();
 
     // Body
     ellipse(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 70, 70);
 
-
-
     push();
-    translate(-player.x,-player.y);
-    text('0',0,0);
-    text('200',200,0);
-    text('400',400,0);
+    translate(-player.x, -player.y);
+    text('0', 0, 0);
+    text('200', 200, 0);
+    text('400', 400, 0);
     let i = 0;
-    image(objectCache[i].img, -objectCache[i].object_size/2,-objectCache[i].object_size/2,objectCache[i].object_size,objectCache[i].object_size);
+    image(objectCache[i].img, -objectCache[i].object_size / 2, -objectCache[i].object_size / 2, objectCache[i].object_size, objectCache[i].object_size);
     pop();
+
+    circle(10, 10, 30);
 }
