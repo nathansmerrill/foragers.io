@@ -44,11 +44,11 @@ if __name__ == '__main__':
     OBJECT_TYPES = ['tree', 'stone', 'iron', 'ruby']
 
     objects = []
-    for i in range(0, 10):
+    for i in range(0, 10000):
         objects.append(Object(
             random.choice(OBJECT_TYPES),
-            random.uniform(-50, 50),
-            random.uniform(-50, 50)
+            random.uniform(20, 40020),
+            random.uniform(20, 40020)
         ))
 
     for object in objects:

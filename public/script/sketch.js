@@ -155,9 +155,60 @@ function draw() {
     text('0', 0, 0);
     text('200', 200, 0);
     text('400', 400, 0);
-    let i = 0;
-    image(objectCache[i].img, -objectCache[i].object_size / 2, -objectCache[i].object_size / 2, objectCache[i].object_size, objectCache[i].object_size);
-    pop();
 
-    circle(10, 10, 30);
+    // Culling Boundaries
+    let cullingX = player.x - SCREEN_WIDTH * (8/5);
+    let cullingY = player.y - SCREEN_HEIGHT * (8/5);
+    let cullingW = player.x + SCREEN_WIDTH * (8/5);
+    let cullingH = player.y + SCREEN_HEIGHT * (8/5);
+
+    // Object Rendering
+    for (let i = 0; i < objects.length; i++) {
+        // Render with Culling
+        if (objects[i].x >= cullingX && objects[i].y >= cullingY && objects[i].x <= cullingW && objects[i].y <= cullingH) {
+            // Get Loaded Object
+            let objectLoaded;
+            switch (objects[i].type) {
+                case 'tree':
+                    objectLoaded = objectCache [0];
+                    break;
+                case 'stone':
+                    objectLoaded = objectCache [1];
+                    break;
+                case 'iron':
+                    objectLoaded = objectCache [2];
+                    break;
+                case 'ruby':
+                    objectLoaded = objectCache [3];
+                    break;
+                default:
+                    alert('Error: Unknown Object');
+                    break;
+            }
+
+            // Render
+            let ox = objects[i].x;
+            let oy = objects[i].y;
+            let img = objectLoaded.img;
+            let size = objectLoaded.object_size;
+
+            image (img, ox - size / 2, oy - size / 2, size, size);
+
+        }
+    }
+
+    // World Borders
+    fill(0,100);
+    noStroke();
+    rect(-1000, -1000, 40000 + 2000,1000);
+    rect(-1000, 0, 1000, 40000);
+    rect(-1000, 40000,40000 + 2000,1000);
+    rect(40000, 40000, 1000, 40000 + 1000);
+    pop();
+    textSize(32);
+    fill(255);
+    stroke(21);
+    strokeWeight(10);
+    text(round(player.x), 2, 35);
+    text(round(player.y), 2, 70);
 }
