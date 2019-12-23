@@ -1,15 +1,5 @@
 let socket = io.connect('http://localhost:4000');
 
-const SCREEN_WIDTH = innerWidth;
-const SCREEN_HEIGHT = innerHeight;
-
-const PLAYER_SPEED = 5;
-const FRAME_RATE_ESTIMATE = 60;
-
-let inputs = [];
-
-let objects = [];
-
 // Javascript doesn't have enums so...
 let ObjectTypes = {
     WOOD: 0,
@@ -49,18 +39,28 @@ let objectCache = [
     }
 ];
 
+const SCREEN_WIDTH = innerWidth;
+const SCREEN_HEIGHT = innerHeight;
+
+const PLAYER_SPEED = 5;
+const FRAME_RATE_ESTIMATE = 60;
+
+let inputs = {
+    angle: 0,
+    keyboard: []
+};
+
+let objects = [];
+
+let players = {};
+
+let player = {};
+
 let deltaTime;
 let lagModifier;
 
-let player = {
-    x: 0,
-    y: 0,
-    name: "Red",
-    view: 0
-};
-
 socket.on('ping', function (data) {
-    console.log(data)
+    console.log(data);
 });
 
 socket.on('objects', function (data) {
@@ -71,13 +71,31 @@ socket.on('objects', function (data) {
     objects = parsedData;
 });
 
+socket.on('player', function (data) {
+    // Parse Server Data
+    let parsedData = JSON.parse(data);
+    console.log(parsedData);
+    if (parsedData.sid === socket.id) {
+        console.log('this player updated');
+        player.x = parsedData.x;
+        player.y = parsedData.y;
+    } else {
+        console.log('other player updated with sid ' + parsedData.sid);
+        players[parsedData.sid] = {
+            x: parsedData.x,
+            y: parsedData.y,
+            angle: parsedData.angle
+        }
+    }
+});
+
 function keyPressed() {
-    inputs.push(key);
+    inputs['keyboard'].push(key);
     console.log(inputs);
 }
 
 function keyReleased() {
-    inputs = inputs.filter(item => item !== key);
+    inputs['keyboard'] = inputs['keyboard'].filter(item => item !== key);
 }
 
 function preload() {
@@ -92,21 +110,8 @@ function setup() {
 }
 
 function update() {
-    deltaTime = 1 / frameRate();
-    lagModifier = deltaTime * FRAME_RATE_ESTIMATE;
-    // Move Player
-    if (inputs.includes('w')) {
-        player.y -= PLAYER_SPEED * lagModifier;
-    }
-    if (inputs.includes('s')) {
-        player.y += PLAYER_SPEED * lagModifier;
-    }
-    if (inputs.includes('a')) {
-        player.x -= PLAYER_SPEED * lagModifier;
-    }
-    if (inputs.includes('d')) {
-        player.x += PLAYER_SPEED * lagModifier;
-    }
+    inputs.angle = atan2(mouseY - SCREEN_HEIGHT / 2, mouseX - SCREEN_WIDTH / 2);
+    socket.emit('inputs', inputs);
 }
 
 function draw() {
@@ -135,32 +140,58 @@ function draw() {
     // Player
     fill(230, 220, 170);
     stroke(40);
+
+    // Body
+    ellipse(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 70, 70);
+
     // Hands
-    let angle = atan2(mouseY - height / 2, mouseX - width / 2);
+    
     push();
 
     translate(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-    rotate(angle);
+    rotate(inputs.angle);
 
     ellipse(26, 26, 24, 24);
     ellipse(26, -26, 24, 24);
 
     pop();
 
-    // Body
-    ellipse(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 70, 70);
+
+
 
     push();
-    translate(-player.x, -player.y);
+    translate(-player.x + SCREEN_WIDTH / 2, -player.y + SCREEN_HEIGHT / 2);
     text('0', 0, 0);
     text('200', 200, 0);
     text('400', 400, 0);
 
+    // Draw other players
+    for (let sid in players) {
+        // Player To Draw
+        drawPlayer = players[sid];
+
+        console.log('Drawing player ' + sid + ' with x ' + drawPlayer.x + ' and y ' + drawPlayer.y);
+
+        // Body
+        ellipse(drawPlayer.x, drawPlayer.y, 70, 70);
+
+        // Hands
+        push();
+
+        translate(drawPlayer.x, drawPlayer.y);
+        rotate(drawPlayer.angle);
+
+        ellipse(26, 26, 24, 24);
+        ellipse(26, -26, 24, 24);
+
+        pop();
+    }
+
     // Culling Boundaries
-    let cullingX = player.x - SCREEN_WIDTH * (8/5);
-    let cullingY = player.y - SCREEN_HEIGHT * (8/5);
-    let cullingW = player.x + SCREEN_WIDTH * (8/5);
-    let cullingH = player.y + SCREEN_HEIGHT * (8/5);
+    let cullingX = player.x - SCREEN_WIDTH * (3/5);
+    let cullingY = player.y - SCREEN_HEIGHT * (5/5);
+    let cullingW = player.x + SCREEN_WIDTH * (3/5);
+    let cullingH = player.y + SCREEN_HEIGHT * (5/5);
 
     // Object Rendering
     for (let i = 0; i < objects.length; i++) {
@@ -192,10 +223,11 @@ function draw() {
             let img = objectLoaded.img;
             let size = objectLoaded.object_size;
 
-            image (img, ox - size / 2, oy - size / 2, size, size);
+            image(img, ox - size / 2, oy - size / 2, size, size);
 
         }
     }
+
 
     // World Borders
     fill(0,100);
@@ -204,11 +236,16 @@ function draw() {
     rect(-1000, 0, 1000, 40000);
     rect(-1000, 40000,40000 + 2000,1000);
     rect(40000, 40000, 1000, 40000 + 1000);
+
+
     pop();
+
     textSize(32);
+
     fill(255);
     stroke(21);
     strokeWeight(10);
     text(round(player.x), 2, 35);
     text(round(player.y), 2, 70);
+    fill(255);
 }
