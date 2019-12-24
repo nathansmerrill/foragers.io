@@ -58,7 +58,7 @@ async def inputs(sid, data):
     # print(data['keyboard'])
     # Player Input
 
-    # print(data['lag'])
+    # print(data)
     player = players[sid]
     if 'a' in data['keyboard']:
         player.x -= player.speed * data['lag']
@@ -69,7 +69,6 @@ async def inputs(sid, data):
     if 's' in data['keyboard']:
         player.y += player.speed * data['lag']
     player.angle = data['angle']
-    # print(data)
     await sio.emit('player', json.dumps(player.getDict()))
 
 app.router.add_get('/', index)
@@ -87,7 +86,7 @@ if __name__ == '__main__':
             random.uniform(20, 40020)
         ))
 
-    for object in objects:
-        print(object.getDict())
+    # for object in objects:
+    #     print(object.getDict())
 
     web.run_app(app, port=4000)

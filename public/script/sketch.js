@@ -271,15 +271,23 @@ function draw() {
 
     // Resource UI
     fill(0,100);
-    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 50, 150, 40, 5);
-    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 100, 150, 40, 5);
-    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 150, 150, 40, 5);
-    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 200, 150, 40, 5);
 
-    image (icons.ruby, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 50 + 5, 30, 30);
-    image (icons.metal, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 100 + 5, 30, 30);
-    image (icons.stone, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 150 + 5, 30, 30);
+    // New smaller resources
+    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 200, 110, 40, 5);
+    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 150, 110, 40, 5);
+    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 100, 110, 40, 5);
+    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 50, 110, 40, 5);
+
+    // Old big resources
+    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 200, 150, 40, 5);
+    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 150, 150, 40, 5);
+    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 100, 150, 40, 5);
+    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 50, 150, 40, 5);
+
     image (icons.wood, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 200 + 5, 30, 30);
+    image (icons.stone, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 150 + 5, 30, 30);
+    image (icons.metal, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 100 + 5, 30, 30);
+    image (icons.ruby, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 50 + 5, 30, 30);
 
     textAlign(RIGHT, TOP);
     textSize(24);
