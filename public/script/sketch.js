@@ -39,6 +39,17 @@ let objectCache = [
     }
 ];
 
+let icons = {
+    wood : null,
+    woodurl : 'assets/img/WoodResourceIcon.png',
+    stone : null,
+    stoneurl : 'assets/img/StoneResourceIcon.png',
+    ruby : null,
+    rubyurl : 'assets/img/RubyResourceIcon.png',
+    metal : null,
+    metalurl : 'assets/img/MetalResourceIcon.png',
+};
+
 const SCREEN_WIDTH = innerWidth;
 const SCREEN_HEIGHT = innerHeight;
 
@@ -46,6 +57,7 @@ const PLAYER_SPEED = 5;
 const FRAME_RATE_ESTIMATE = 60;
 
 let inputs = {
+    lag : 0,
     angle: 0,
     keyboard: []
 };
@@ -64,10 +76,10 @@ socket.on('ping', function (data) {
 });
 
 socket.on('objects', function (data) {
-    console.log('objects recieved');
+    // console.log('objects recieved');
 
     let parsedData = JSON.parse(data);
-    console.log(parsedData);
+    // console.log(parsedData);
     objects = parsedData;
 });
 
@@ -76,11 +88,11 @@ socket.on('player', function (data) {
     let parsedData = JSON.parse(data);
     console.log(parsedData);
     if (parsedData.sid === socket.id) {
-        console.log('this player updated');
+        // console.log('this player updated');
         player.x = parsedData.x;
         player.y = parsedData.y;
     } else {
-        console.log('other player updated with sid ' + parsedData.sid);
+        // console.log('other player updated with sid ' + parsedData.sid);
         players[parsedData.sid] = {
             x: parsedData.x,
             y: parsedData.y,
@@ -89,9 +101,13 @@ socket.on('player', function (data) {
     }
 });
 
+socket.on('left', function(data) {
+    delete players[data]
+});
+
 function keyPressed() {
     inputs['keyboard'].push(key);
-    console.log(inputs);
+    // console.log(inputs);
 }
 
 function keyReleased() {
@@ -103,14 +119,20 @@ function preload() {
         objectCache[i].img = loadImage(objectCache[i].url);
         console.log('Loading Object :' + objectCache[i].name);
     }
+    icons.wood = loadImage(icons.woodurl);
+    icons.stone = loadImage(icons.stoneurl);
+    icons.metal = loadImage(icons.metalurl);
+    icons.ruby = loadImage(icons.rubyurl);
 }
 
 function setup() {
     createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
+    textFont('Roboto Mono');
 }
 
 function update() {
     inputs.angle = atan2(mouseY - SCREEN_HEIGHT / 2, mouseX - SCREEN_WIDTH / 2);
+    inputs.lag = 60 / frameRate();
     socket.emit('inputs', inputs);
 }
 
@@ -145,7 +167,7 @@ function draw() {
     ellipse(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 70, 70);
 
     // Hands
-    
+
     push();
 
     translate(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -170,7 +192,7 @@ function draw() {
         // Player To Draw
         drawPlayer = players[sid];
 
-        console.log('Drawing player ' + sid + ' with x ' + drawPlayer.x + ' and y ' + drawPlayer.y);
+        // console.log('Drawing player ' + sid + ' with x ' + drawPlayer.x + ' and y ' + drawPlayer.y);
 
         // Body
         ellipse(drawPlayer.x, drawPlayer.y, 70, 70);
@@ -201,19 +223,19 @@ function draw() {
             let objectLoaded;
             switch (objects[i].type) {
                 case 'tree':
-                    objectLoaded = objectCache [0];
+                    objectLoaded = objectCache[0];
                     break;
                 case 'stone':
-                    objectLoaded = objectCache [1];
+                    objectLoaded = objectCache[1];
                     break;
                 case 'iron':
-                    objectLoaded = objectCache [2];
+                    objectLoaded = objectCache[2];
                     break;
                 case 'ruby':
-                    objectLoaded = objectCache [3];
+                    objectLoaded = objectCache[3];
                     break;
                 default:
-                    alert('Error: Unknown Object');
+                    console.log('Error: Unknown Object');
                     break;
             }
 
@@ -240,12 +262,30 @@ function draw() {
 
     pop();
 
-    textSize(32);
+    textSize(16);
 
     fill(255);
-    stroke(21);
-    strokeWeight(10);
-    text(round(player.x), 2, 35);
-    text(round(player.y), 2, 70);
+    noStroke();
+    text(round(player.x*10)/10, 2, 35);
+    text(round(player.y*10)/10, 2, 70);
+
+    // Resource UI
+    fill(0,100);
+    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 50, 150, 40, 5);
+    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 100, 150, 40, 5);
+    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 150, 150, 40, 5);
+    rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 200, 150, 40, 5);
+
+    image (icons.ruby, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 50 + 5, 30, 30);
+    image (icons.metal, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 100 + 5, 30, 30);
+    image (icons.stone, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 150 + 5, 30, 30);
+    image (icons.wood, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 200 + 5, 30, 30);
+
+    textAlign(RIGHT, TOP);
+    textSize(24);
     fill(255);
+    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50 + 10);
+    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 100 + 10);
+    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 150 + 10);
+    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 200 + 10);
 }

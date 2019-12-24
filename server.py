@@ -50,6 +50,7 @@ async def connect(sid, environ):
 @sio.event
 async def disconnect(sid):
     print('Client disconnected ' + sid)
+    await sio.emit('left', sid)
 
 @sio.event
 async def inputs(sid, data):
@@ -57,18 +58,19 @@ async def inputs(sid, data):
     # print(data['keyboard'])
     # Player Input
 
+    # print(data['lag'])
     player = players[sid]
     if 'a' in data['keyboard']:
-        player.x -= player.speed
+        player.x -= player.speed * data['lag']
     if 'd' in data['keyboard']:
-        player.x += player.speed
+        player.x += player.speed * data['lag']
     if 'w' in data['keyboard']:
-        player.y -= player.speed
+        player.y -= player.speed * data['lag']
     if 's' in data['keyboard']:
-        player.y += player.speed
+        player.y += player.speed * data['lag']
     player.angle = data['angle']
-    print(data)
-    await sio.emit('player', json.dumps(players[sid].getDict()))
+    # print(data)
+    await sio.emit('player', json.dumps(player.getDict()))
 
 app.router.add_get('/', index)
 app.router.add_static('/', './public')
