@@ -71,6 +71,14 @@ async def inputs(sid, data):
     player.angle = data['angle']
     await sio.emit('player', json.dumps(player.getDict()))
 
+@sio.event
+async def chat(sid, data):
+    await sio.emit('chat', {
+        'sid': sid,
+        'message': data
+    })
+
+
 app.router.add_get('/', index)
 app.router.add_static('/', './public')
 

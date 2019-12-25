@@ -86,7 +86,7 @@ socket.on('objects', function (data) {
 socket.on('player', function (data) {
     // Parse Server Data
     let parsedData = JSON.parse(data);
-    console.log(parsedData);
+    // console.log(parsedData);
     if (parsedData.sid === socket.id) {
         // console.log('this player updated');
         player.x = parsedData.x;
@@ -105,9 +105,16 @@ socket.on('left', function(data) {
     delete players[data]
 });
 
+socket.on('chat', function(data) {
+    console.log(data['sid'] + ' says ' + data['message']);
+});
+
 function keyPressed() {
     inputs['keyboard'].push(key);
-    // console.log(inputs);
+    if (key === 'Enter') {
+        let message = prompt('Enter Message:');
+        socket.emit('chat', message);
+    }
 }
 
 function keyReleased() {
@@ -134,6 +141,10 @@ function update() {
     inputs.angle = atan2(mouseY - SCREEN_HEIGHT / 2, mouseX - SCREEN_WIDTH / 2);
     inputs.lag = 60 / frameRate();
     socket.emit('inputs', inputs);
+
+    // if (inputs.keyboard.includes('b')) {
+    //     alert('hi');
+    // }
 }
 
 function draw() {
