@@ -141,6 +141,7 @@ function keyPressed() {
             chatTextbox.elt.blur();
         } else {
             chatTextbox.elt.focus();
+            inputs.keyboard = [];
         }
         // let message = prompt('Enter Message:');
         // socket.emit('chat', message);
