@@ -71,6 +71,17 @@ let player = {};
 let deltaTime;
 let lagModifier;
 
+let chatMessages = [];
+
+let chatTextbox;
+let chat;
+
+function showMessage(message) {
+    chatMessages.push(message);
+//    if list > thiccnessLimit {
+//             unthickify();
+}
+
 socket.on('ping', function (data) {
     console.log(data);
 });
@@ -107,13 +118,26 @@ socket.on('left', function(data) {
 
 socket.on('chat', function(data) {
     console.log(data['sid'] + ' says ' + data['message']);
+    // chat.elt.append(data['sid'] + ' says ' + data['message']);
+    chat.elt.innerHTML = '<span class="chat-line"><strong>' + data['sid'] + ': </strong>' + data['message'] + '</span>' + chat.elt.innerHTML;
 });
 
 function keyPressed() {
     inputs['keyboard'].push(key);
+    // Chat
     if (key === 'Enter') {
-        let message = prompt('Enter Message:');
-        socket.emit('chat', message);
+        if (chatTextbox.elt === document.activeElement) {
+            let message = chatTextbox.value();
+            if (message !== '') {
+                socket.emit('chat', chatTextbox.value());
+                chatTextbox.value('');
+            }
+            chatTextbox.elt.blur();
+        } else {
+            chatTextbox.elt.focus();
+        }
+        // let message = prompt('Enter Message:');
+        // socket.emit('chat', message);
     }
 }
 
@@ -135,6 +159,17 @@ function preload() {
 function setup() {
     createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
     textFont('Roboto Mono');
+
+    chatTextbox = createInput();
+    chatTextbox.addClass('chat chat-textbox');
+    chatTextbox.size(300, 30);
+    chatTextbox.position(20, SCREEN_HEIGHT - 50);
+
+    chat = createP();
+    chat.addClass('chat chat-display scrollbar');
+    // chat.size(300, 400);
+    chat.size(400, 400);
+    chat.position(20, SCREEN_HEIGHT - 485);
 }
 
 function update() {

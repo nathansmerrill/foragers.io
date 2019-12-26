@@ -45,7 +45,7 @@ async def connect(sid, environ):
 
     players[sid] = Player('Player ' + sid, sid)
     # print([object.jsonify() for object in objects])
-    await sio.emit('ping', 'pong')
+    # await sio.emit('ping', 'pong')
 
 @sio.event
 async def disconnect(sid):
