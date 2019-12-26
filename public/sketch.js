@@ -82,6 +82,10 @@ function showMessage(message) {
 //             unthickify();
 }
 
+function isChatOpen() {
+    return chatTextbox.elt === document.activeElement;
+}
+
 socket.on('ping', function (data) {
     console.log(data);
 });
@@ -123,10 +127,12 @@ socket.on('chat', function(data) {
 });
 
 function keyPressed() {
-    inputs['keyboard'].push(key);
+    if (!isChatOpen()) {
+        inputs['keyboard'].push(key);
+    }
     // Chat
     if (key === 'Enter') {
-        if (chatTextbox.elt === document.activeElement) {
+        if (isChatOpen()) {
             let message = chatTextbox.value();
             if (message !== '') {
                 socket.emit('chat', chatTextbox.value());
@@ -142,7 +148,9 @@ function keyPressed() {
 }
 
 function keyReleased() {
-    inputs['keyboard'] = inputs['keyboard'].filter(item => item !== key);
+    if (!isChatOpen()) {
+        inputs['keyboard'] = inputs['keyboard'].filter(item => item !== key);
+    }
 }
 
 function preload() {
