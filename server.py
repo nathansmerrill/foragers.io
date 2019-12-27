@@ -97,4 +97,4 @@ if __name__ == '__main__':
     # for object in objects:
     #     print(object.getDict())
 
-    web.run_app(app, port=4000)
+    web.run_app(app, port=8020)

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PROJECT="/home/merrilln/foragers.io"
 cd $PROJECT
 if [ -s server.pid ]; then
