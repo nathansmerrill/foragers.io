@@ -50,14 +50,14 @@ async def index(request):
 async def connect(sid, environ):
     print('[CONNECT] ' + sid)
     await sio.emit('objects', [object.getDict() for object in objects], to=sid)
-
+    await sio.emit('join', sid)
     players[sid] = Player('Player ' + sid, sid)
-    # await sio.emit('ping', 'pong')
 
 @sio.event
 async def disconnect(sid):
     print('[DISCONNECT] ' + sid)
-    await sio.emit('disconnect', sid)
+    players.pop(sid, None)
+    await sio.emit('leave', sid)
 
 @sio.event
 async def inputs(sid, data):

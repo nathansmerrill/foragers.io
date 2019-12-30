@@ -68,15 +68,19 @@ let players = {};
 let player = {};
 
 let chatTextbox;
-let chat;
+let chatDisplay;
 
 function isChatOpen() {
     return chatTextbox.elt === document.activeElement;
 }
 
-socket.on('ping', function (data) {
-    console.log(data);
-});
+function chatAppend(text) {
+    if (chatDisplay !== undefined) {
+        chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML;
+    } else {
+        console.log('tried to add to chat but undefined ' + text);
+    }
+}
 
 socket.on('objects', function (data) {
     // console.log('objects recieved');
@@ -104,14 +108,19 @@ socket.on('player', function (data) {
     }
 });
 
-socket.on('disconnect', function(data) {
-    delete players[data]
+socket.on('join', function(data) {
+   chatAppend('<strong>' + data + '</strong> joined');
+});
+
+socket.on('leave', function(data) {
+    delete players[data];
+    chatAppend('<strong>' + data + '</strong> left');
 });
 
 socket.on('chat', function(data) {
     console.log(data['sid'] + ' says ' + data['message']);
     // chat.elt.append(data['sid'] + ' says ' + data['message']);
-    chat.elt.innerHTML = '<span class="chat-line"><strong>' + data['sid'] + ': </strong>' + data['message'] + '</span>' + chat.elt.innerHTML;
+    chatAppend('<span class="chat-line"><strong>' + data['sid'] + ': </strong>' + data['message'] + '</span>');
 });
 
 function keyPressed() {
@@ -162,21 +171,16 @@ function setup() {
     chatTextbox.size(300, 30);
     chatTextbox.position(20, SCREEN_HEIGHT - 50);
 
-    chat = createP();
-    chat.addClass('chat chat-display');
+    chatDisplay = createP();
+    chatDisplay.addClass('chat chat-display');
     // chat.size(300, 400);
-    chat.size(400, 400);
-    chat.position(20, SCREEN_HEIGHT - 485);
+    chatDisplay.size(400, 400);
+    chatDisplay.position(20, SCREEN_HEIGHT - 485);
 }
 
 function update() {
     inputs.angle = atan2(mouseY - SCREEN_HEIGHT / 2, mouseX - SCREEN_WIDTH / 2);
-    inputs.lag = 60 / frameRate();
     socket.emit('inputs', inputs);
-
-    // if (inputs.keyboard.includes('b')) {
-    //     alert('hi');
-    // }
 }
 
 function draw() {
