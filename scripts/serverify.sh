@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#PROJECT="/home/merrilln/foragers.io"
-PROJECT="/home/nathan/Documents/Websites/foragers.io"
+PROJECT="/home/merrilln/foragers.io"
 cd $PROJECT
 sed -i 's/port=4000/port=8020/' server.py
 sed -i "s/app.router.add_get('\/', index)/# app.router.add_get('\/', index)/" server.py
