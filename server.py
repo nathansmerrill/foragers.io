@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from aiohttp import web
+import aiohttp_cors
 import socketio
 import random, json, math
 
@@ -28,9 +29,16 @@ class Player:
     def getDict(self):
         return self.__dict__
 
-sio = socketio.AsyncServer()
+# sio = socketio.AsyncServer()
+sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
 app = web.Application()
 sio.attach(app)
+
+cors = aiohttp_cors.setup(app)
+for resource in app.router._resources:
+    if resource.raw_match('/socket.io/'):
+        continue
+    cors.add(resource, {'*': aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers='*', allow_headers='*')})
 
 players = {}
 
