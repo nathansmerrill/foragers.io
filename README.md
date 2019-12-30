@@ -1,3 +1,3 @@
 # Foragers.io 
 - A multiplayer team survival and combat game
-- [Link](http://cs.catlin.edu:8020)
+- [foragers.nathanm.cf](http://foragers.nathanm.cf)
