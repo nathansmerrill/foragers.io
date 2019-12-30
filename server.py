@@ -49,10 +49,9 @@ async def index(request):
 @sio.event
 async def connect(sid, environ):
     print('[CONNECT] ' + sid)
-    await sio.emit('objects', json.dumps([object.getDict() for object in objects]), to=sid)
+    await sio.emit('objects', [object.getDict() for object in objects], to=sid)
 
     players[sid] = Player('Player ' + sid, sid)
-    # print([object.jsonify() for object in objects])
     # await sio.emit('ping', 'pong')
 
 @sio.event
@@ -69,15 +68,15 @@ async def inputs(sid, data):
     # print(data)
     player = players[sid]
     if 'a' in data['keyboard']:
-        player.x -= player.speed * data['lag']
+        player.x -= player.speed
     if 'd' in data['keyboard']:
-        player.x += player.speed * data['lag']
+        player.x += player.speed
     if 'w' in data['keyboard']:
-        player.y -= player.speed * data['lag']
+        player.y -= player.speed
     if 's' in data['keyboard']:
-        player.y += player.speed * data['lag']
+        player.y += player.speed
     player.angle = data['angle']
-    await sio.emit('player', json.dumps(player.getDict()))
+    await sio.emit('player', player.getDict())
 
 @sio.event
 async def chat(sid, data):
@@ -85,7 +84,6 @@ async def chat(sid, data):
         'sid': sid,
         'message': data
     })
-
 
 app.router.add_get('/', index)
 app.router.add_static('/', './public')

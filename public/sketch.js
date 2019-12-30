@@ -57,7 +57,6 @@ const PLAYER_SPEED = 5;
 const FRAME_RATE_ESTIMATE = 60;
 
 let inputs = {
-    lag : 0,
     angle: 0,
     keyboard: []
 };
@@ -68,19 +67,8 @@ let players = {};
 
 let player = {};
 
-let deltaTime;
-let lagModifier;
-
-let chatMessages = [];
-
 let chatTextbox;
 let chat;
-
-function showMessage(message) {
-    chatMessages.push(message);
-//    if list > thiccnessLimit {
-//             unthickify();
-}
 
 function isChatOpen() {
     return chatTextbox.elt === document.activeElement;
@@ -93,25 +81,25 @@ socket.on('ping', function (data) {
 socket.on('objects', function (data) {
     // console.log('objects recieved');
 
-    let parsedData = JSON.parse(data);
+    // let parsedData = JSON.parse(data);
     // console.log(parsedData);
-    objects = parsedData;
+    objects = data;
 });
 
 socket.on('player', function (data) {
     // Parse Server Data
-    let parsedData = JSON.parse(data);
+    // let parsedData = JSON.parse(data);
     // console.log(parsedData);
-    if (parsedData.sid === socket.id) {
+    if (data.sid === socket.id) {
         // console.log('this player updated');
-        player.x = parsedData.x;
-        player.y = parsedData.y;
+        player.x = data.x;
+        player.y = data.y;
     } else {
         // console.log('other player updated with sid ' + parsedData.sid);
-        players[parsedData.sid] = {
-            x: parsedData.x,
-            y: parsedData.y,
-            angle: parsedData.angle
+        players[data.sid] = {
+            x: data.x,
+            y: data.y,
+            angle: data.angle
         }
     }
 });
@@ -175,7 +163,7 @@ function setup() {
     chatTextbox.position(20, SCREEN_HEIGHT - 50);
 
     chat = createP();
-    chat.addClass('chat chat-display scrollbar');
+    chat.addClass('chat chat-display');
     // chat.size(300, 400);
     chat.size(400, 400);
     chat.position(20, SCREEN_HEIGHT - 485);
