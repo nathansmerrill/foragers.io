@@ -116,7 +116,7 @@ socket.on('player', function (data) {
     }
 });
 
-socket.on('left', function(data) {
+socket.on('disconnect', function(data) {
     delete players[data]
 });
 

@@ -40,7 +40,7 @@ async def index(request):
 
 @sio.event
 async def connect(sid, environ):
-    print('Client connected ' + sid)
+    print('[CONNECT] ' + sid)
     await sio.emit('objects', json.dumps([object.getDict() for object in objects]), to=sid)
 
     players[sid] = Player('Player ' + sid, sid)
@@ -49,12 +49,12 @@ async def connect(sid, environ):
 
 @sio.event
 async def disconnect(sid):
-    print('Client disconnected ' + sid)
-    await sio.emit('left', sid)
+    print('[DISCONNECT] ' + sid)
+    await sio.emit('disconnect', sid)
 
 @sio.event
 async def inputs(sid, data):
-    # print('Recieved inputs from ' + sid)
+    # print('Received inputs from ' + sid)
     # print(data['keyboard'])
     # Player Input
 
@@ -83,6 +83,7 @@ app.router.add_get('/', index)
 app.router.add_static('/', './public')
 
 if __name__ == '__main__':
+    print('[SERVER] started')
     # ObjectTypes = Enum('ObjectTypes', 'tree stone iron ruby')
     OBJECT_TYPES = ['tree', 'stone', 'iron', 'ruby']
 
@@ -97,4 +98,4 @@ if __name__ == '__main__':
     # for object in objects:
     #     print(object.getDict())
 
-    web.run_app(app, port=8020)
+    web.run_app(app, port=4000)
