@@ -53,6 +53,11 @@ let icons = {
 const SCREEN_WIDTH = innerWidth;
 const SCREEN_HEIGHT = innerHeight;
 
+// Create "Leave site? Changes you made may not be saved" prompt
+window.onbeforeunload = function() {
+    return true;
+};
+
 const PLAYER_SPEED = 5;
 const FRAME_RATE_ESTIMATE = 60;
 
