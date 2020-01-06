@@ -80,6 +80,7 @@ async def inputs(sid, data):
 
 @sio.event
 async def chat(sid, data):
+    print('[CHAT] ' + sid + ': ' + data)
     await sio.emit('chat', {
         'sid': sid,
         'message': data
@@ -93,6 +94,7 @@ if __name__ == '__main__':
     # ObjectTypes = Enum('ObjectTypes', 'tree stone iron ruby')
     OBJECT_TYPES = ['tree', 'stone', 'iron', 'ruby']
 
+    print('[SERVER] Generating terrain...')
     objects = []
     for i in range(0, 10000):
         objects.append(Object(
@@ -100,5 +102,6 @@ if __name__ == '__main__':
             random.uniform(20, 40020),
             random.uniform(20, 40020)
         ))
+    print('[SERVER] Terrain generation complete')
 
     web.run_app(app, port=4000)
