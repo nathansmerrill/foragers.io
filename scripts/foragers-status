@@ -2,9 +2,9 @@
 
 PROJECT="/home/merrilln/foragers.io"
 cd $PROJECT
-if [ -s server.pid ]; then
-  if ps -p $(cat server.pid) > /dev/null; then
-    echo Server running with pid $(cat server.pid)
+if [ -s server/server.pid ]; then
+  if ps -p $(cat server/server.pid) > /dev/null; then
+    echo Server running with pid $(cat server/server.pid)
   else
     echo Server crashed
   fi

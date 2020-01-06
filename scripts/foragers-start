@@ -2,6 +2,6 @@
 
 PROJECT="/home/merrilln/foragers.io"
 cd $PROJECT
-./server.py 1>log/server.log 2>log/server.err &
-echo $! > server.pid
+server/server.py 1>server/log/server.log 2>server/log/server.err &
+echo $! > server/server.pid
 echo Server Started
