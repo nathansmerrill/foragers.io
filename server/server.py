@@ -43,7 +43,7 @@ for resource in app.router._resources:
 players = {}
 
 async def index(request):
-    with open('../public/index.html') as f:
+    with open('./public/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
 @sio.event
@@ -86,7 +86,7 @@ async def chat(sid, data):
     })
 
 app.router.add_get('/', index)
-app.router.add_static('/', '../public')
+app.router.add_static('/', './public')
 
 if __name__ == '__main__':
     print('[SERVER] started')

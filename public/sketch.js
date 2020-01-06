@@ -225,14 +225,8 @@ function draw() {
 
     pop();
 
-
-
-
     push();
     translate(-player.x + SCREEN_WIDTH / 2, -player.y + SCREEN_HEIGHT / 2);
-    text('0', 0, 0);
-    text('200', 200, 0);
-    text('400', 400, 0);
 
     // Draw other players
     for (let sid in players) {
