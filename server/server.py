@@ -81,9 +81,14 @@ async def inputs(sid, data):
 @sio.event
 async def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
+    splitMessage = data.split()
+    # Chat filter
+    for i, word in enumerate(splitMessage):
+        if word in filters['words']:
+            splitMessage[i] = random.choice(filters['replacements'])
     await sio.emit('chat', {
         'sid': sid,
-        'message': data
+        'message': ' '.join(splitMessage)
     })
 
 app.router.add_get('/', index)
@@ -93,6 +98,9 @@ if __name__ == '__main__':
     print('[SERVER] started')
     # ObjectTypes = Enum('ObjectTypes', 'tree stone iron ruby')
     OBJECT_TYPES = ['tree', 'stone', 'iron', 'ruby']
+
+    with open('server/filter.json', 'r') as filtersFile:
+        filters = json.load(filtersFile)
 
     print('[SERVER] Generating terrain...')
     objects = []

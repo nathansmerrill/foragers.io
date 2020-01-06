@@ -1,3 +1,16 @@
 {
-
+  "words": [
+    "ass",
+    "damn",
+    "fuck",
+    "shit",
+    "bitch",
+    "godammit"
+  ],
+  "replacements": [
+    "oof",
+    "aaaa",
+    "****",
+    "*nice word*"
+  ]
 }
