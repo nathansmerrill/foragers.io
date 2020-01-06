@@ -3,7 +3,7 @@
 from aiohttp import web
 import aiohttp_cors
 import socketio
-import random, json, math
+import random, json
 
 class Object:
     def __init__(self, type, x, y):
@@ -81,14 +81,22 @@ async def inputs(sid, data):
 @sio.event
 async def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
+    message = data
     splitMessage = data.split()
     # Chat filter
-    for i, word in enumerate(splitMessage):
-        if word in filters['words']:
-            splitMessage[i] = random.choice(filters['replacements'])
+    for i, chatWord in enumerate(splitMessage):
+        for filter in filters:
+            for blockedWord in filter['blocked']:
+                if chatWord == blockedWord:
+                    replacementWord = random.choice(filter['replacements'])
+                    if filter['entireMessage']:
+                        message = replacementWord
+                    else:
+                        splitMessage[i] = replacementWord
+                        message = ' '.join(splitMessage)
     await sio.emit('chat', {
         'sid': sid,
-        'message': ' '.join(splitMessage)
+        'message': message
     })
 
 app.router.add_get('/', index)

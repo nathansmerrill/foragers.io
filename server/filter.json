@@ -1,16 +1,76 @@
-{
-  "words": [
-    "ass",
-    "damn",
-    "fuck",
-    "shit",
-    "bitch",
-    "godammit"
-  ],
-  "replacements": [
-    "oof",
-    "aaaa",
-    "****",
-    "*nice word*"
-  ]
-}
+[
+  {
+    "blocked": [
+      "fuck"
+    ],
+    "replacements": [
+      "frick",
+      "heck"
+    ],
+    "entireMessage": false
+  },
+  {
+    "blocked": [
+      "fucking",
+      "shitting",
+      "bitching"
+    ],
+    "replacements": [
+      "yeeting",
+      "oofing",
+      "bruhhing"
+    ],
+    "entireMessage": false
+  },
+  {
+    "blocked": [
+      "shit"
+    ],
+    "replacements": [
+      "poop",
+      "turd"
+    ],
+    "entireMessage": false
+  },
+  {
+    "blocked": [
+      "bitch"
+    ],
+    "replacements": [
+      "female dog"
+    ],
+    "entireMessage": false
+  },
+  {
+    "blocked": [
+      "ass"
+    ],
+    "replacements": [
+      "donkey"
+    ],
+    "entireMessage": false
+  },
+  {
+    "blocked": [
+      "f/uck",
+      "fu/ck",
+      "fuc/k",
+      "f.uck",
+      "fu.ck",
+      "fuc.k",
+      "f,uck",
+      "fu,ck",
+      "fuc,k",
+      "fuk",
+      "fak",
+      "fuc",
+      "fck"
+    ],
+    "replacements": [
+      "I think I'm clever, but I'm really not.",
+      "This chat filter works really well!",
+      "frickity darn hecking frick darn"
+    ],
+    "entireMessage": true
+  }
+]
