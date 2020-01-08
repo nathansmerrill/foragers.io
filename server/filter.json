@@ -6,8 +6,7 @@
     "replacements": [
       "frick",
       "heck"
-    ],
-    "entireMessage": false
+    ]
   },
   {
     "blocked": [
@@ -19,8 +18,20 @@
       "yeeting",
       "oofing",
       "bruhhing"
+    ]
+  },
+  {
+    "blocked": [
+      "fuckers",
+      "shitters",
+      "bitches"
     ],
-    "entireMessage": false
+    "replacements": [
+      "bruhhers",
+      "yeeters",
+      "oofers",
+      "sweethearts"
+    ]
   },
   {
     "blocked": [
@@ -29,8 +40,7 @@
     "replacements": [
       "poop",
       "turd"
-    ],
-    "entireMessage": false
+    ]
   },
   {
     "blocked": [
@@ -38,8 +48,7 @@
     ],
     "replacements": [
       "female dog"
-    ],
-    "entireMessage": false
+    ]
   },
   {
     "blocked": [
@@ -47,8 +56,7 @@
     ],
     "replacements": [
       "donkey"
-    ],
-    "entireMessage": false
+    ]
   },
   {
     "blocked": [

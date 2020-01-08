@@ -89,7 +89,7 @@ async def chat(sid, data):
             for blockedWord in filter['blocked']:
                 if chatWord == blockedWord:
                     replacementWord = random.choice(filter['replacements'])
-                    if filter['entireMessage']:
+                    if ('entireMessage' in filter) and filter['entireMessage']:
                         message = replacementWord
                     else:
                         splitMessage[i] = replacementWord
