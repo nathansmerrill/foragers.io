@@ -11,28 +11,28 @@ let ObjectTypes = {
 let objectCache = [
     {
         name: 'WOOD-RESOURCE',
-        url: 'assets/img/TreeResource.png',
+        url: 'assets/img/resources/TreeResource.png',
         resource: ObjectTypes.WOOD,
         img: null,
         object_size: 300
     },
     {
         name: 'STONE-RESOURCE',
-        url: 'assets/img/StoneResource.png',
+        url: 'assets/img/resources/StoneResource.png',
         resource: ObjectTypes.STONE,
         img: null,
         object_size: 150
     },
     {
         name: 'METAL-RESOURCE',
-        url: 'assets/img/MetalResource.png',
+        url: 'assets/img/resources/MetalResource.png',
         resource: ObjectTypes.METAL,
         img: null,
         object_size: 150
     },
     {
         name: 'RUBY-RESOURCE',
-        url: 'assets/img/RubyResource.png',
+        url: 'assets/img/resources/RubyResource.png',
         resource: ObjectTypes.RUBY,
         img: null,
         object_size: 150
@@ -41,13 +41,13 @@ let objectCache = [
 
 let icons = {
     wood : null,
-    woodurl : 'assets/img/WoodResourceIcon.png',
+    woodurl : 'assets/img/resourceIcons/WoodResourceIcon.png',
     stone : null,
-    stoneurl : 'assets/img/StoneResourceIcon.png',
+    stoneurl : 'assets/img/resourceIcons/StoneResourceIcon.png',
     ruby : null,
-    rubyurl : 'assets/img/RubyResourceIcon.png',
+    rubyurl : 'assets/img/resourceIcons/RubyResourceIcon.png',
     metal : null,
-    metalurl : 'assets/img/MetalResourceIcon.png',
+    metalurl : 'assets/img/resourceIcons/MetalResourceIcon.png',
 };
 
 const SCREEN_WIDTH = innerWidth;
