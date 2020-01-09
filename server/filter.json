@@ -57,28 +57,5 @@
     "replacements": [
       "donkey"
     ]
-  },
-  {
-    "blocked": [
-      "f/uck",
-      "fu/ck",
-      "fuc/k",
-      "f.uck",
-      "fu.ck",
-      "fuc.k",
-      "f,uck",
-      "fu,ck",
-      "fuc,k",
-      "fuk",
-      "fak",
-      "fuc",
-      "fck"
-    ],
-    "replacements": [
-      "I think I'm clever, but I'm really not.",
-      "This chat filter works really well!",
-      "frickity darn hecking frick darn"
-    ],
-    "entireMessage": true
   }
 ]
