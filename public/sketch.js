@@ -34,9 +34,6 @@ window.onbeforeunload = function() {
     return true;
 };
 
-const PLAYER_SPEED = 5;
-const FRAME_RATE_ESTIMATE = 60;
-
 let inputs = {
     angle: 0,
     keyboard: []
