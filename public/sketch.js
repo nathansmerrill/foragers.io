@@ -8,46 +8,22 @@ let ObjectTypes = {
     RUBY: 3
 };
 
-let objectCache = [
-    {
-        name: 'WOOD-RESOURCE',
-        url: 'assets/img/resources/TreeResource.png',
-        resource: ObjectTypes.WOOD,
-        img: null,
-        object_size: 300
-    },
-    {
-        name: 'STONE-RESOURCE',
-        url: 'assets/img/resources/StoneResource.png',
-        resource: ObjectTypes.STONE,
-        img: null,
-        object_size: 150
-    },
-    {
-        name: 'METAL-RESOURCE',
-        url: 'assets/img/resources/MetalResource.png',
-        resource: ObjectTypes.METAL,
-        img: null,
-        object_size: 150
-    },
-    {
-        name: 'RUBY-RESOURCE',
-        url: 'assets/img/resources/RubyResource.png',
-        resource: ObjectTypes.RUBY,
-        img: null,
-        object_size: 150
-    }
-];
+let images = {
+    'wood': null,
+    'stone': null,
+    'iron': null,
+    'ruby': null,
+    'woodIcon': null,
+    'stoneIcon': null,
+    'ironIcon': null,
+    'rubyIcon': null
+};
 
-let icons = {
-    wood : null,
-    woodurl : 'assets/img/resourceIcons/WoodResourceIcon.png',
-    stone : null,
-    stoneurl : 'assets/img/resourceIcons/StoneResourceIcon.png',
-    ruby : null,
-    rubyurl : 'assets/img/resourceIcons/RubyResourceIcon.png',
-    metal : null,
-    metalurl : 'assets/img/resourceIcons/MetalResourceIcon.png',
+let resourceSizes = {
+    'wood': 300,
+    'stone': 150,
+    'iron': 150,
+    'ruby': 150
 };
 
 const SCREEN_WIDTH = innerWidth;
@@ -157,14 +133,10 @@ function keyReleased() {
 }
 
 function preload() {
-    for (let i = 0; i < objectCache.length; i++) {
-        objectCache[i].img = loadImage(objectCache[i].url);
-        console.log('Loading Object :' + objectCache[i].name);
+    for (let key in images) {
+        console.log('Loading image ' + key);
+        images[key] = loadImage('assets/img/' + key + '.png');
     }
-    icons.wood = loadImage(icons.woodurl);
-    icons.stone = loadImage(icons.stoneurl);
-    icons.metal = loadImage(icons.metalurl);
-    icons.ruby = loadImage(icons.rubyurl);
 }
 
 function setup() {
@@ -265,37 +237,18 @@ function draw() {
     for (let i = 0; i < objects.length; i++) {
         // Render with Culling
         if (objects[i].x >= cullingX && objects[i].y >= cullingY && objects[i].x <= cullingW && objects[i].y <= cullingH) {
-            // Get Loaded Object
-            let objectLoaded;
-            switch (objects[i].type) {
-                case 'tree':
-                    objectLoaded = objectCache[0];
-                    break;
-                case 'stone':
-                    objectLoaded = objectCache[1];
-                    break;
-                case 'iron':
-                    objectLoaded = objectCache[2];
-                    break;
-                case 'ruby':
-                    objectLoaded = objectCache[3];
-                    break;
-                default:
-                    console.log('Error: Unknown Object');
-                    break;
-            }
+            let object = objects[i];
 
             // Render
-            let ox = objects[i].x;
-            let oy = objects[i].y;
-            let img = objectLoaded.img;
-            let size = objectLoaded.object_size;
+            let ox = object.x;
+            let oy = object.y;
+            let img = images[object.type];
+            let size = resourceSizes[object.type];
 
             image(img, ox - size / 2, oy - size / 2, size, size);
 
         }
     }
-
 
     // World Borders
     fill(0,100);
@@ -330,10 +283,10 @@ function draw() {
     // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 100, 150, 40, 5);
     // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 50, 150, 40, 5);
 
-    image (icons.wood, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 200 + 5, 30, 30);
-    image (icons.stone, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 150 + 5, 30, 30);
-    image (icons.metal, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 100 + 5, 30, 30);
-    image (icons.ruby, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 50 + 5, 30, 30);
+    image (images['woodIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 200 + 5, 30, 30);
+    image (images['stoneIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 150 + 5, 30, 30);
+    image (images['ironIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 100 + 5, 30, 30);
+    image (images['rubyIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 50 + 5, 30, 30);
 
     textAlign(RIGHT, TOP);
     textSize(24);

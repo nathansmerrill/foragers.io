@@ -104,8 +104,8 @@ app.router.add_static('/', './public')
 
 if __name__ == '__main__':
     print('[SERVER] started')
-    # ObjectTypes = Enum('ObjectTypes', 'tree stone iron ruby')
-    OBJECT_TYPES = ['tree', 'stone', 'iron', 'ruby']
+    # ObjectTypes = Enum('ObjectTypes', 'wood stone iron ruby')
+    OBJECT_TYPES = ['wood', 'stone', 'iron', 'ruby']
 
     with open('server/filter.json', 'r') as filtersFile:
         filters = json.load(filtersFile)
