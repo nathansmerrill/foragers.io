@@ -77,6 +77,7 @@ async def inputs(sid, data):
 
     # print(data)
     player = players[sid]
+    oldPlayer = player
     movementSpeed = player.getMovementSpeed()
     if 'a' in data['keyboard']:
         player.x -= movementSpeed
@@ -87,6 +88,17 @@ async def inputs(sid, data):
     if 's' in data['keyboard']:
         player.y += movementSpeed
     player.angle = data['angle']
+
+    # Movement validation
+    if player.x < 0:
+        player.x = 0
+    if player.x > mapWidth:
+        player.x = mapWidth
+    if player.y < 0:
+        player.y = 0
+    if player.y > mapHeight:
+        player.y = mapHeight
+
     player.move()
     await sio.emit('player', player.getDict())
 
@@ -117,6 +129,8 @@ app.router.add_static('/', 'public')
 if __name__ == '__main__':
     print('[SERVER] started')
     players = {}
+    mapWidth = 2000
+    mapHeight = 2000
     # ObjectTypes = Enum('ObjectTypes', 'wood stone iron ruby')
     objectTypes = ['wood', 'stone', 'iron', 'ruby']
 
@@ -128,8 +142,8 @@ if __name__ == '__main__':
     for i in range(0, 10000):
         objects.append(Object(
             random.choice(objectTypes),
-            random.uniform(0, 2000),
-            random.uniform(0, 2000)
+            random.uniform(0, mapWidth),
+            random.uniform(0, mapHeight)
         ))
     print('[SERVER] Terrain generation complete')
 
