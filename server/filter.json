@@ -24,13 +24,26 @@
     "blocked": [
       "fuckers",
       "shitters",
-      "bitches"
+      "bitches",
+      "assholes"
     ],
     "replacements": [
       "bruhhers",
       "yeeters",
       "oofers",
       "sweethearts"
+    ]
+  },
+  {
+    "blocked": [
+      "asshole",
+      "fucker"
+    ],
+    "replacements": [
+      "bruhher",
+      "yeeter",
+      "oofer",
+      "sweetheart"
     ]
   },
   {
