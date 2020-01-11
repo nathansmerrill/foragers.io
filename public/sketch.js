@@ -86,7 +86,26 @@ function resizeUI() {
     tuning['handSize'] = IGUToPixels(1.4);
     tuning['handPosition'] = IGUToPixels(1.5);
 
+    tuning['chatTextboxWidth'] = IGUToPixels(15);
     tuning['chatTextboxHeight'] = IGUToPixels(1.5);
+    tuning['chatTextboxX'] = IGUToPixels(1);
+    tuning['chatTextboxY'] = IGUToPixels(1.3, innerHeight, tuning['chatTextboxHeight']);
+
+    tuning['chatDisplayWidth'] = IGUToPixels(22);
+    tuning['chatDisplayHeight'] = IGUToPixels(22);
+    tuning['chatDisplayX'] = IGUToPixels(1);
+    tuning['chatDisplayY'] = IGUToPixels(4.25, innerHeight, tuning['chatDisplayHeight']);
+
+    resizeChat();
+}
+
+function resizeChat() {
+    chatTextbox.size(tuning['chatTextboxWidth'], tuning['chatTextboxHeight']);
+    chatTextbox.position(tuning['chatTextboxX'], tuning['chatTextboxY']);
+
+    // chat.size(300, 400);
+    chatDisplay.size(tuning['chatDisplayWidth'], tuning['chatDisplayHeight']);
+    chatDisplay.position(tuning['chatDisplayX'], tuning['chatDisplayY']);
 }
 
 socket.on('objects', function (data) {
@@ -169,18 +188,13 @@ function setup() {
     createCanvas(innerWidth, innerHeight);
     textFont('Roboto Mono');
 
-    resizeUI();
-
     chatTextbox = createInput();
     chatTextbox.addClass('chat chat-textbox');
-    chatTextbox.size(300, 30);
-    chatTextbox.position(20, innerHeight - 50);
 
     chatDisplay = createP();
     chatDisplay.addClass('chat chat-display');
-    // chat.size(300, 400);
-    chatDisplay.size(400, 400);
-    chatDisplay.position(20, innerHeight - 485);
+
+    resizeUI();
 }
 
 function windowResized() {
