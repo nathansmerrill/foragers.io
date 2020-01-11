@@ -80,9 +80,10 @@ function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
 function resizeUI() {
     resizeCanvas(innerWidth, innerHeight);
 
-    tuning['playerSize'] = IGUToPixels(4);
+    tuning['playerSize'] = IGUToPixels(3.9);
+    tuning['playerStroke'] = IGUToPixels(2.2);
 
-    tuning['handSize'] = IGUToPixels(1.35);
+    tuning['handSize'] = IGUToPixels(1.4);
     tuning['handPosition'] = IGUToPixels(1.5);
 
     tuning['chatTextboxHeight'] = IGUToPixels(1.5);
@@ -168,6 +169,8 @@ function setup() {
     createCanvas(innerWidth, innerHeight);
     textFont('Roboto Mono');
 
+    resizeUI();
+
     chatTextbox = createInput();
     chatTextbox.addClass('chat chat-textbox');
     chatTextbox.size(300, 30);
@@ -214,10 +217,10 @@ function draw() {
 
     // Player
     fill(230, 220, 170);
-    stroke(40);
+    stroke(tuning['playerStroke']);
 
     // Body
-    ellipse(innerWidth / 2, innerHeight / 2, 70, 70);
+    ellipse(innerWidth / 2, innerHeight / 2, tuning['playerSize'], tuning['playerSize']);
 
     // Hands
 
@@ -226,8 +229,8 @@ function draw() {
     translate(innerWidth / 2, innerHeight / 2);
     rotate(inputs.angle);
 
-    ellipse(26, 26, 24, 24);
-    ellipse(26, -26, 24, 24);
+    ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
+    ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
 
     pop();
 
@@ -242,7 +245,7 @@ function draw() {
         // console.log('Drawing player ' + sid + ' with x ' + drawPlayer.x + ' and y ' + drawPlayer.y);
 
         // Body
-        ellipse(IGUToPixels(drawPlayer.x), IGUToPixels(drawPlayer.y), 70, 70);
+        ellipse(IGUToPixels(drawPlayer.x), IGUToPixels(drawPlayer.y), tuning['playerSize'], tuning['playerSize']);
 
         // Hands
         push();
@@ -250,17 +253,17 @@ function draw() {
         translate(IGUToPixels(drawPlayer.x), IGUToPixels(drawPlayer.y));
         rotate(drawPlayer.angle);
 
-        ellipse(26, 26, 24, 24);
-        ellipse(26, -26, 24, 24);
+        ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
+        ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
 
         pop();
     }
 
     // Culling Boundaries
-    let cullingX = player.x - 75;
-    let cullingY = player.y - 75;
-    let cullingW = player.x + 75;
-    let cullingH = player.y + 75;
+    let cullingX = player.x - 60;
+    let cullingY = player.y - 60;
+    let cullingW = player.x + 60;
+    let cullingH = player.y + 60;
 
     // Object Rendering
     for (let i = 0; i < objects.length; i++) {
