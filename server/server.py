@@ -114,13 +114,17 @@ async def chat(sid, data):
                 if chatWord == blockedWord:
                     replacementWord = random.choice(filter['replacements'])
                     if ('entireMessage' in filter) and filter['entireMessage']:
-                        message = replacementWord
+                        splitMessage = replacementWord.split()
                     else:
                         splitMessage[i] = replacementWord
-                        message = ' '.join(splitMessage)
+        # Chat emotes
+        for emote in emotes:
+            if chatWord == emote[0]:
+                splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emote[0] + "." + emote[1] + "'>"
+
     await sio.emit('chat', {
         'sid': sid,
-        'message': message
+        'message': ' '.join(splitMessage)
     })
 
 app.router.add_get('/', index)
@@ -129,6 +133,31 @@ app.router.add_static('/', 'public')
 if __name__ == '__main__':
     print('[SERVER] started')
     players = {}
+    emotes = [
+        ['pogu', 'png'],
+        ['poggers', 'png'],
+        ['pepega', 'png'],
+        ['kappa', 'png'],
+        ['kapp', 'png'],
+        ['trihard', 'png'],
+        ['omegalul', 'png'],
+        ['jebaited', 'png'],
+        ['lul', 'png'],
+        ['lulw', 'png'],
+        ['cmonbruh', 'png'],
+        ['3head', 'png'],
+        ['4head', 'png'],
+        ['5head', 'png'],
+        ['monkas', 'png'],
+        ['monkaw', 'jpg'],
+        ['pepelaugh', 'png'],
+        ['pepehands', 'png'],
+        ['feelsgoodman', 'png'],
+        ['feelsbadman', 'png'],
+        ['clap', 'gif'],
+        ['pepepls', 'gif'],
+        ['coggers', 'gif']
+    ]
     mapWidth = 2000
     mapHeight = 2000
     # ObjectTypes = Enum('ObjectTypes', 'wood stone iron ruby')

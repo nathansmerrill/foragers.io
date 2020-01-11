@@ -23,6 +23,10 @@
 .chat-line {
     margin-bottom: 1%;
 }
+.chat-emote {
+    width: 25px;
+    height: 25px;
+}
 
 /*https://codepen.io/devstreak/pen/dMYgeO*/
 ::-webkit-scrollbar-track {
