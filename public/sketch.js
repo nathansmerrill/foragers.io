@@ -20,14 +20,13 @@ let images = {
 };
 
 let resourceSizes = {
-    'wood': 300,
-    'stone': 150,
-    'iron': 150,
-    'ruby': 150
+    'wood': 15,
+    'stone': 8,
+    'iron': 8,
+    'ruby': 8
 };
 
-const SCREEN_WIDTH = innerWidth;
-const SCREEN_HEIGHT = innerHeight;
+let tuning = {};
 
 // Create "Leave site? Changes you made may not be saved" prompt
 window.onbeforeunload = function() {
@@ -48,6 +47,8 @@ let player = {};
 let chatTextbox;
 let chatDisplay;
 
+let date = new Date();
+
 function isChatOpen() {
     return chatTextbox.elt === document.activeElement;
 }
@@ -58,6 +59,33 @@ function chatAppend(text) {
     } else {
         console.log('tried to add to chat but undefined ' + text);
     }
+}
+
+/**
+ * @return {number}
+ */
+function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
+    let biggerSide = innerWidth;
+    // if (innerHeight > biggerSide) {
+    //     biggerSide = innerHeight
+    // }
+    let basePixels = (igu * (biggerSide / 100)) + offset;
+    if (oppositeEdge === 0) {
+        return basePixels;
+    } else {
+        return oppositeEdge - basePixels;
+    }
+}
+
+function resizeUI() {
+    resizeCanvas(innerWidth, innerHeight);
+
+    tuning['playerSize'] = IGUToPixels(4);
+
+    tuning['handSize'] = IGUToPixels(1.35);
+    tuning['handPosition'] = IGUToPixels(1.5);
+
+    tuning['chatTextboxHeight'] = IGUToPixels(1.5);
 }
 
 socket.on('objects', function (data) {
@@ -137,23 +165,27 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
+    createCanvas(innerWidth, innerHeight);
     textFont('Roboto Mono');
 
     chatTextbox = createInput();
     chatTextbox.addClass('chat chat-textbox');
     chatTextbox.size(300, 30);
-    chatTextbox.position(20, SCREEN_HEIGHT - 50);
+    chatTextbox.position(20, innerHeight - 50);
 
     chatDisplay = createP();
     chatDisplay.addClass('chat chat-display');
     // chat.size(300, 400);
     chatDisplay.size(400, 400);
-    chatDisplay.position(20, SCREEN_HEIGHT - 485);
+    chatDisplay.position(20, innerHeight - 485);
+}
+
+function windowResized() {
+    resizeUI();
 }
 
 function update() {
-    inputs.angle = atan2(mouseY - SCREEN_HEIGHT / 2, mouseX - SCREEN_WIDTH / 2);
+    inputs.angle = atan2(mouseY - innerHeight / 2, mouseX - innerWidth / 2);
     socket.emit('inputs', inputs);
 }
 
@@ -170,14 +202,14 @@ function draw() {
     // Grid
     stroke(110, 140, 60);
 
-    let gridOffsetX = 100 - player.x % 100;
-    let gridOffsetY = 100 - player.y % 100;
+    let gridOffsetX = 100 - IGUToPixels(player.x) % 100;
+    let gridOffsetY = 100 - IGUToPixels(player.y) % 100;
 
-    for (let i = -1; i < SCREEN_WIDTH / 100 + 1; i++) {
-        line(i * 100 + gridOffsetX, 0, i * 100 + gridOffsetX, SCREEN_HEIGHT);
+    for (let i = -1; i < innerWidth / 100 + 1; i++) {
+        line(i * 100 + gridOffsetX, 0, i * 100 + gridOffsetX, innerHeight);
     }
-    for (let i = -1; i < SCREEN_HEIGHT / 80 + 1; i++) {
-        line(0, i * 100 + gridOffsetY, SCREEN_WIDTH, i * 100 + gridOffsetY);
+    for (let i = -1; i < innerHeight / 80 + 1; i++) {
+        line(0, i * 100 + gridOffsetY, innerWidth, i * 100 + gridOffsetY);
     }
 
     // Player
@@ -185,13 +217,13 @@ function draw() {
     stroke(40);
 
     // Body
-    ellipse(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 70, 70);
+    ellipse(innerWidth / 2, innerHeight / 2, 70, 70);
 
     // Hands
 
     push();
 
-    translate(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+    translate(innerWidth / 2, innerHeight / 2);
     rotate(inputs.angle);
 
     ellipse(26, 26, 24, 24);
@@ -200,7 +232,7 @@ function draw() {
     pop();
 
     push();
-    translate(-player.x + SCREEN_WIDTH / 2, -player.y + SCREEN_HEIGHT / 2);
+    translate(-IGUToPixels(player.x) + innerWidth / 2, -IGUToPixels(player.y) + innerHeight / 2);
 
     // Draw other players
     for (let sid in players) {
@@ -210,12 +242,12 @@ function draw() {
         // console.log('Drawing player ' + sid + ' with x ' + drawPlayer.x + ' and y ' + drawPlayer.y);
 
         // Body
-        ellipse(drawPlayer.x, drawPlayer.y, 70, 70);
+        ellipse(IGUToPixels(drawPlayer.x), IGUToPixels(drawPlayer.y), 70, 70);
 
         // Hands
         push();
 
-        translate(drawPlayer.x, drawPlayer.y);
+        translate(IGUToPixels(drawPlayer.x), IGUToPixels(drawPlayer.y));
         rotate(drawPlayer.angle);
 
         ellipse(26, 26, 24, 24);
@@ -225,10 +257,10 @@ function draw() {
     }
 
     // Culling Boundaries
-    let cullingX = player.x - SCREEN_WIDTH * (3/5);
-    let cullingY = player.y - SCREEN_HEIGHT * (5/5);
-    let cullingW = player.x + SCREEN_WIDTH * (3/5);
-    let cullingH = player.y + SCREEN_HEIGHT * (5/5);
+    let cullingX = player.x - 75;
+    let cullingY = player.y - 75;
+    let cullingW = player.x + 75;
+    let cullingH = player.y + 75;
 
     // Object Rendering
     for (let i = 0; i < objects.length; i++) {
@@ -237,10 +269,10 @@ function draw() {
             let object = objects[i];
 
             // Render
-            let ox = object.x;
-            let oy = object.y;
+            let ox = IGUToPixels(object.x);
+            let oy = IGUToPixels(object.y);
             let img = images[object.type];
-            let size = resourceSizes[object.type];
+            let size = IGUToPixels(resourceSizes[object.type]);
 
             image(img, ox - size / 2, oy - size / 2, size, size);
 
@@ -269,27 +301,27 @@ function draw() {
     fill(0,100);
 
     // New smaller resources
-    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 200, 110, 40, 5);
-    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 150, 110, 40, 5);
-    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 100, 110, 40, 5);
-    rect(SCREEN_WIDTH - 120, SCREEN_HEIGHT - 50, 110, 40, 5);
+    rect(innerWidth - 120, innerHeight - 200, 110, 40, 5);
+    rect(innerWidth - 120, innerHeight - 150, 110, 40, 5);
+    rect(innerWidth - 120, innerHeight - 100, 110, 40, 5);
+    rect(innerWidth - 120, innerHeight - 50, 110, 40, 5);
 
     // Old big resources
-    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 200, 150, 40, 5);
-    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 150, 150, 40, 5);
-    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 100, 150, 40, 5);
-    // rect(SCREEN_WIDTH - 160, SCREEN_HEIGHT - 50, 150, 40, 5);
+    // rect(innerWidth - 160, innerHeight - 200, 150, 40, 5);
+    // rect(innerWidth - 160, innerHeight - 150, 150, 40, 5);
+    // rect(innerWidth - 160, innerHeight - 100, 150, 40, 5);
+    // rect(innerWidth - 160, innerHeight - 50, 150, 40, 5);
 
-    image (images['woodIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 200 + 5, 30, 30);
-    image (images['stoneIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 150 + 5, 30, 30);
-    image (images['ironIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 100 + 5, 30, 30);
-    image (images['rubyIcon'], SCREEN_WIDTH - 45, SCREEN_HEIGHT - 50 + 5, 30, 30);
+    image(images['woodIcon'], innerWidth - 45, innerHeight - 200 + 5, 30, 30);
+    image(images['stoneIcon'], innerWidth - 45, innerHeight - 150 + 5, 30, 30);
+    image(images['ironIcon'], innerWidth - 45, innerHeight - 100 + 5, 30, 30);
+    image(images['rubyIcon'], innerWidth - 45, innerHeight - 50 + 5, 30, 30);
 
     textAlign(RIGHT, TOP);
     textSize(24);
     fill(255);
-    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50 + 10);
-    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 100 + 10);
-    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 150 + 10);
-    text(0, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 200 + 10);
+    text(0, innerWidth - 50, innerHeight - 50 + 10);
+    text(0, innerWidth - 50, innerHeight - 100 + 10);
+    text(0, innerWidth - 50, innerHeight - 150 + 10);
+    text(0, innerWidth - 50, innerHeight - 200 + 10);
 }

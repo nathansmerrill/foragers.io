@@ -3,7 +3,7 @@
 from aiohttp import web
 import aiohttp_cors
 import socketio
-import random, json
+import random, json, time
 
 class Object:
     def __init__(self, type, x, y):
@@ -23,8 +23,15 @@ class Player:
         self.x = 1  # random.uniform(0, 40000)
         self.y = 2  # random.uniform(0, 40000)
         self.angle = 0
-        self.speed = 5
+        self.speed = 1
         self.sid = sid
+        self.lastMoved = currentTimeMillis()
+
+    def getMovementSpeed(self):
+        return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.015
+
+    def move(self):
+        self.lastMoved = currentTimeMillis()
 
     def getDict(self):
         return self.__dict__
@@ -42,8 +49,12 @@ for resource in app.router._resources:
 
 players = {}
 
+def currentTimeMillis():
+    # return int(round(time.time() * 1000))
+    return time.time() * 1000
+
 async def index(request):
-    with open('./public/index.html') as f:
+    with open('public/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
 @sio.event
@@ -68,14 +79,15 @@ async def inputs(sid, data):
     # print(data)
     player = players[sid]
     if 'a' in data['keyboard']:
-        player.x -= player.speed
+        player.x -= player.getMovementSpeed()
     if 'd' in data['keyboard']:
-        player.x += player.speed
+        player.x += player.getMovementSpeed()
     if 'w' in data['keyboard']:
-        player.y -= player.speed
+        player.y -= player.getMovementSpeed()
     if 's' in data['keyboard']:
-        player.y += player.speed
+        player.y += player.getMovementSpeed()
     player.angle = data['angle']
+    player.move()
     await sio.emit('player', player.getDict())
 
 @sio.event
@@ -100,7 +112,7 @@ async def chat(sid, data):
     })
 
 app.router.add_get('/', index)
-app.router.add_static('/', './public')
+app.router.add_static('/', 'public')
 
 if __name__ == '__main__':
     print('[SERVER] started')
@@ -115,8 +127,8 @@ if __name__ == '__main__':
     for i in range(0, 10000):
         objects.append(Object(
             random.choice(OBJECT_TYPES),
-            random.uniform(20, 40020),
-            random.uniform(20, 40020)
+            random.uniform(0, 2000),
+            random.uniform(0, 2000)
         ))
     print('[SERVER] Terrain generation complete')
 
