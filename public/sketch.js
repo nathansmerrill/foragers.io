@@ -160,10 +160,12 @@ function resizeChat() {
     tuning['chatDisplayY'] = IGUToPixels(4.25, innerHeight, tuning['chatDisplayHeight']);
 
     tuning['chatFontSize'] = IGUToPixels(0.8);
+    tuning['chatTextboxBorderRadius'] = IGUToPixels(1);
 
     chatTextbox.size(tuning['chatTextboxWidth'], tuning['chatTextboxHeight']);
     chatTextbox.position(tuning['chatTextboxX'], tuning['chatTextboxY']);
     chatTextbox.style('font-size', tuning['chatFontSize'] + 'px');
+    chatTextbox.style('border-radius', tuning['chatTextboxBorderRadius'] + 'px');
 
     chatDisplay.size(tuning['chatDisplayWidth'], tuning['chatDisplayHeight']);
     chatDisplay.position(tuning['chatDisplayX'], tuning['chatDisplayY']);
