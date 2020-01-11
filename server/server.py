@@ -77,14 +77,15 @@ async def inputs(sid, data):
 
     # print(data)
     player = players[sid]
+    movementSpeed = player.getMovementSpeed()
     if 'a' in data['keyboard']:
-        player.x -= player.getMovementSpeed()
+        player.x -= movementSpeed
     if 'd' in data['keyboard']:
-        player.x += player.getMovementSpeed()
+        player.x += movementSpeed
     if 'w' in data['keyboard']:
-        player.y -= player.getMovementSpeed()
+        player.y -= movementSpeed
     if 's' in data['keyboard']:
-        player.y += player.getMovementSpeed()
+        player.y += movementSpeed
     player.angle = data['angle']
     player.move()
     await sio.emit('player', player.getDict())
