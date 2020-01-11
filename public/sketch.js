@@ -159,12 +159,15 @@ function resizeChat() {
     tuning['chatDisplayX'] = IGUToPixels(1);
     tuning['chatDisplayY'] = IGUToPixels(4.25, innerHeight, tuning['chatDisplayHeight']);
 
+    tuning['chatFontSize'] = IGUToPixels(0.8);
+
     chatTextbox.size(tuning['chatTextboxWidth'], tuning['chatTextboxHeight']);
     chatTextbox.position(tuning['chatTextboxX'], tuning['chatTextboxY']);
+    chatTextbox.style('font-size', tuning['chatFontSize'] + 'px');
 
-    // chat.size(300, 400);
     chatDisplay.size(tuning['chatDisplayWidth'], tuning['chatDisplayHeight']);
     chatDisplay.position(tuning['chatDisplayX'], tuning['chatDisplayY']);
+    chatDisplay.style('font-size', tuning['chatFontSize'] + 'px');
 }
 
 socket.on('objects', function (data) {
