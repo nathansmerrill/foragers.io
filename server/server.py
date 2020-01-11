@@ -48,8 +48,6 @@ for resource in app.router._resources:
         continue
     cors.add(resource, {'*': aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers='*', allow_headers='*')})
 
-players = {}
-
 def currentTimeMillis():
     # return int(round(time.time() * 1000))
     return time.time() * 1000
@@ -117,8 +115,9 @@ app.router.add_static('/', 'public')
 
 if __name__ == '__main__':
     print('[SERVER] started')
+    players = {}
     # ObjectTypes = Enum('ObjectTypes', 'wood stone iron ruby')
-    OBJECT_TYPES = ['wood', 'stone', 'iron', 'ruby']
+    objectTypes = ['wood', 'stone', 'iron', 'ruby']
 
     with open('server/filter.json', 'r') as filtersFile:
         filters = json.load(filtersFile)
@@ -127,7 +126,7 @@ if __name__ == '__main__':
     objects = []
     for i in range(0, 10000):
         objects.append(Object(
-            random.choice(OBJECT_TYPES),
+            random.choice(objectTypes),
             random.uniform(0, 2000),
             random.uniform(0, 2000)
         ))
