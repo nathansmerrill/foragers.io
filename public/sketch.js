@@ -70,11 +70,11 @@ function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
     // if (innerHeight > biggerSide) {
     //     biggerSide = innerHeight
     // }
-    let basePixels = (igu * (biggerSide / 100)) + offset;
+    let basePixels = igu * (biggerSide / 100);
     if (oppositeEdge === 0) {
-        return basePixels;
+        return basePixels + offset;
     } else {
-        return oppositeEdge - basePixels;
+        return oppositeEdge - basePixels - offset;
     }
 }
 
@@ -83,6 +83,7 @@ function resizeUI() {
 
     resizePlayers();
     resizeBorder();
+    resizeResourceDisplay();
     resizeChat();
 }
 
@@ -116,7 +117,35 @@ function resizeBorder() {
     tuning['borderRightY'] = 0;
     tuning['borderRightWidth'] = tuning['borderThickness'];
     tuning['borderRightHeight'] = mapHeight;
+}
 
+function resizeResourceDisplay() {
+    tuning['resourceDisplayTextSize'] = IGUToPixels(0.8);
+    tuning['resourceDisplayOffset'] = 2.6;
+
+    tuning['resourceDisplayBackgroundWidth'] = IGUToPixels(6);
+    tuning['resourceDisplayBackgroundHeight'] = IGUToPixels(2);
+    tuning['resourceDisplayBackgroundX'] = IGUToPixels(0.6, innerWidth, tuning['resourceDisplayBackgroundWidth']);
+    tuning['resourceDisplayBackgroundWoodY'] = IGUToPixels(tuning['resourceDisplayOffset']*4, innerHeight);
+    tuning['resourceDisplayBackgroundStoneY'] = IGUToPixels(tuning['resourceDisplayOffset']*3, innerHeight);
+    tuning['resourceDisplayBackgroundIronY'] = IGUToPixels(tuning['resourceDisplayOffset']*2, innerHeight);
+    tuning['resourceDisplayBackgroundRubyY'] = IGUToPixels(tuning['resourceDisplayOffset'], innerHeight);
+
+    tuning['resourceDisplayIconSize'] = IGUToPixels(1.5);
+    tuning['resourceDisplayIconX'] = IGUToPixels(1, innerWidth, tuning['resourceDisplayIconSize']);
+    tuning['resourceDisplayIconYOffset'] = -((tuning['resourceDisplayBackgroundHeight'] - tuning['resourceDisplayIconSize']) / 2);
+    tuning['resourceDisplayIconWoodY'] = IGUToPixels(tuning['resourceDisplayOffset']*4, innerHeight, tuning['resourceDisplayIconYOffset']);
+    tuning['resourceDisplayIconStoneY'] = IGUToPixels(tuning['resourceDisplayOffset']*3, innerHeight, tuning['resourceDisplayIconYOffset']);
+    tuning['resourceDisplayIconIronY'] = IGUToPixels(tuning['resourceDisplayOffset']*2, innerHeight, tuning['resourceDisplayIconYOffset']);
+    tuning['resourceDisplayIconRubyY'] = IGUToPixels(tuning['resourceDisplayOffset'], innerHeight, tuning['resourceDisplayIconYOffset']);
+
+    tuning['resourceDisplayTextSize'] = IGUToPixels(1.2);
+    tuning['resourceDisplayTextX'] = IGUToPixels(2.8, innerWidth);
+    tuning['resourceDisplayTextYOffset'] = -((tuning['resourceDisplayBackgroundHeight'] - tuning['resourceDisplayTextSize']) / 1.5);
+    tuning['resourceDisplayTextWoodY'] = IGUToPixels(tuning['resourceDisplayOffset']*4, innerHeight, tuning['resourceDisplayTextYOffset']);
+    tuning['resourceDisplayTextStoneY'] = IGUToPixels(tuning['resourceDisplayOffset']*3, innerHeight, tuning['resourceDisplayTextYOffset']);
+    tuning['resourceDisplayTextIronY'] = IGUToPixels(tuning['resourceDisplayOffset']*2, innerHeight, tuning['resourceDisplayTextYOffset']);
+    tuning['resourceDisplayTextRubyY'] = IGUToPixels(tuning['resourceDisplayOffset'], innerHeight, tuning['resourceDisplayTextYOffset']);
 }
 
 function resizeChat() {
@@ -347,27 +376,21 @@ function draw() {
     fill(0,100);
 
     // New smaller resources
-    rect(innerWidth - 120, innerHeight - 200, 110, 40, 5);
-    rect(innerWidth - 120, innerHeight - 150, 110, 40, 5);
-    rect(innerWidth - 120, innerHeight - 100, 110, 40, 5);
-    rect(innerWidth - 120, innerHeight - 50, 110, 40, 5);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundWoodY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundStoneY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundIronY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundRubyY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
 
-    // Old big resources
-    // rect(innerWidth - 160, innerHeight - 200, 150, 40, 5);
-    // rect(innerWidth - 160, innerHeight - 150, 150, 40, 5);
-    // rect(innerWidth - 160, innerHeight - 100, 150, 40, 5);
-    // rect(innerWidth - 160, innerHeight - 50, 150, 40, 5);
-
-    image(images['woodIcon'], innerWidth - 45, innerHeight - 200 + 5, 30, 30);
-    image(images['stoneIcon'], innerWidth - 45, innerHeight - 150 + 5, 30, 30);
-    image(images['ironIcon'], innerWidth - 45, innerHeight - 100 + 5, 30, 30);
-    image(images['rubyIcon'], innerWidth - 45, innerHeight - 50 + 5, 30, 30);
+    image(images['woodIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconWoodY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['stoneIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconStoneY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['ironIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconIronY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['rubyIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconRubyY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
 
     textAlign(RIGHT, TOP);
-    textSize(24);
+    textSize(tuning['resourceDisplayTextSize']);
     fill(255);
-    text(0, innerWidth - 50, innerHeight - 50 + 10);
-    text(0, innerWidth - 50, innerHeight - 100 + 10);
-    text(0, innerWidth - 50, innerHeight - 150 + 10);
-    text(0, innerWidth - 50, innerHeight - 200 + 10);
+    text('100', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextWoodY']);
+    text('100', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextStoneY']);
+    text('50', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextIronY']);
+    text('10', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextRubyY']);
 }
