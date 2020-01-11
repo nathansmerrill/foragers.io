@@ -47,7 +47,8 @@ let player = {};
 let chatTextbox;
 let chatDisplay;
 
-let date = new Date();
+let mapWidth = IGUToPixels(2000);
+let mapHeight = IGUToPixels(2000);
 
 function isChatOpen() {
     return chatTextbox.elt === document.activeElement;
@@ -80,12 +81,45 @@ function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
 function resizeUI() {
     resizeCanvas(innerWidth, innerHeight);
 
+    resizePlayers();
+    resizeBorder();
+    resizeChat();
+}
+
+function resizePlayers() {
     tuning['playerSize'] = IGUToPixels(3.9);
     tuning['playerStroke'] = IGUToPixels(2.2);
 
     tuning['handSize'] = IGUToPixels(1.4);
     tuning['handPosition'] = IGUToPixels(1.5);
+}
 
+function resizeBorder() {
+    tuning['borderThickness'] = IGUToPixels(50);
+
+    tuning['borderTopX'] = -tuning['borderThickness'];
+    tuning['borderTopY'] = -tuning['borderThickness'];
+    tuning['borderTopWidth'] = mapWidth + (tuning['borderThickness'] * 2);
+    tuning['borderTopHeight'] = tuning['borderThickness'];
+
+    tuning['borderBottomX'] = -tuning['borderThickness'];
+    tuning['borderBottomY'] = mapHeight;
+    tuning['borderBottomWidth'] = mapWidth + (tuning['borderThickness'] * 2);
+    tuning['borderBottomHeight'] = tuning['borderThickness'];
+
+    tuning['borderLeftX'] = -tuning['borderThickness'];
+    tuning['borderLeftY'] = 0;
+    tuning['borderLeftWidth'] = tuning['borderThickness'];
+    tuning['borderLeftHeight'] = mapHeight;
+
+    tuning['borderRightX'] = mapWidth;
+    tuning['borderRightY'] = 0;
+    tuning['borderRightWidth'] = tuning['borderThickness'];
+    tuning['borderRightHeight'] = mapHeight;
+
+}
+
+function resizeChat() {
     tuning['chatTextboxWidth'] = IGUToPixels(15);
     tuning['chatTextboxHeight'] = IGUToPixels(1.5);
     tuning['chatTextboxX'] = IGUToPixels(1);
@@ -96,10 +130,6 @@ function resizeUI() {
     tuning['chatDisplayX'] = IGUToPixels(1);
     tuning['chatDisplayY'] = IGUToPixels(4.25, innerHeight, tuning['chatDisplayHeight']);
 
-    resizeChat();
-}
-
-function resizeChat() {
     chatTextbox.size(tuning['chatTextboxWidth'], tuning['chatTextboxHeight']);
     chatTextbox.position(tuning['chatTextboxX'], tuning['chatTextboxY']);
 
@@ -299,11 +329,10 @@ function draw() {
     // World Borders
     fill(0,100);
     noStroke();
-    rect(-1000, -1000, 40000 + 2000,1000);
-    rect(-1000, 0, 1000, 40000);
-    rect(-1000, 40000,40000 + 2000,1000);
-    rect(40000, 40000, 1000, 40000 + 1000);
-
+    rect(tuning['borderTopX'], tuning['borderTopY'], tuning['borderTopWidth'], tuning['borderTopHeight']);
+    rect(tuning['borderBottomX'], tuning['borderBottomY'], tuning['borderBottomWidth'], tuning['borderBottomHeight']);
+    rect(tuning['borderLeftX'], tuning['borderLeftY'], tuning['borderLeftWidth'], tuning['borderLeftHeight']);
+    rect(tuning['borderRightX'], tuning['borderRightY'], tuning['borderRightWidth'], tuning['borderRightHeight']);
 
     pop();
 
