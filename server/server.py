@@ -25,7 +25,7 @@ class Player:
         self.angle = 0
         self.speed = 1
         self.sid = sid
-        self.lastMoved = currentTimeMillis()
+        self.move()
 
     def getMovementSpeed(self):
         return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.02
