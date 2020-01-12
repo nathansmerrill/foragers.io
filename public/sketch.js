@@ -130,6 +130,7 @@ function resizeResourceDisplay() {
     tuning['resourceDisplayBackgroundStoneY'] = IGUToPixels(tuning['resourceDisplayOffset']*3, innerHeight);
     tuning['resourceDisplayBackgroundIronY'] = IGUToPixels(tuning['resourceDisplayOffset']*2, innerHeight);
     tuning['resourceDisplayBackgroundRubyY'] = IGUToPixels(tuning['resourceDisplayOffset'], innerHeight);
+    tuning['resourceDisplayBackgroundRounding'] = IGUToPixels(0.26);
 
     tuning['resourceDisplayIconSize'] = IGUToPixels(1.5);
     tuning['resourceDisplayIconX'] = IGUToPixels(1, innerWidth, tuning['resourceDisplayIconSize']);
@@ -381,10 +382,10 @@ function draw() {
     fill(0,100);
 
     // New smaller resources
-    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundWoodY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
-    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundStoneY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
-    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundIronY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
-    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundRubyY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], 5);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundWoodY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundStoneY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundIronY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
+    rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundRubyY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
 
     image(images['woodIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconWoodY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
     image(images['stoneIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconStoneY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
