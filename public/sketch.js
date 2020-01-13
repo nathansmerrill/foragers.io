@@ -375,8 +375,8 @@ function draw() {
 
     fill(255);
     noStroke();
-    text(round(player.x*10)/10, 2, 35);
-    text(round(player.y*10)/10, 2, 70);
+    // text(round(player.x*10)/10, 2, 35);
+    // text(round(player.y*10)/10, 2, 70);
 
     // Resource UI
     fill(0,100);
