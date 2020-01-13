@@ -120,7 +120,11 @@ async def chat(sid, data):
         # Chat emotes
         for emote in emotes:
             if chatWord == emote[0]:
-                splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emote[0] + "." + emote[1] + "'>"
+                if len(emote) == 3:
+                    emoteImage = emote[2]
+                else:
+                    emoteImage = emote[0]
+                splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
 
     await sio.emit('chat', {
         'sid': sid,
