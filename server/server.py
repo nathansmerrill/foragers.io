@@ -62,6 +62,11 @@ async def connect(sid, environ):
     await sio.emit('objects', [object.getDict() for object in objects], to=sid)
     await sio.emit('join', sid)
     players[sid] = Player('Player ' + sid, sid)
+    if ('420' in sid) or ('69' in sid):
+        await sio.emit('chat', {
+            'message': 'Nice',
+            'sid': '42069'
+        })
 
 @sio.event
 async def disconnect(sid):
