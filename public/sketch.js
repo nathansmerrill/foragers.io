@@ -210,10 +210,9 @@ socket.on('leave', function(data) {
     chatAppend('<strong>' + data + '</strong> left');
 });
 
-socket.on('chat', function(data) {
-    console.log(data['sid'] + ' says ' + data['message']);
-    // chat.elt.append(data['sid'] + ' says ' + data['message']);
-    chatAppend('<span class="chat-line"><strong>' + data['sid'] + ': </strong>' + data['message'] + '</span>');
+socket.on('display', function(data) {
+    console.log('displaying ' + data);
+    chatAppend(data);
 });
 
 function keyPressed() {

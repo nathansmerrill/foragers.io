@@ -60,13 +60,14 @@ async def index(request):
 async def connect(sid, environ):
     print('[CONNECT] ' + sid)
     await sio.emit('objects', [object.getDict() for object in objects], to=sid)
-    await sio.emit('join', sid)
-    players[sid] = Player('Player ' + sid, sid)
+    await sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' player(s) online</strong>')
+    await sio.emit('join', sid, skip_sid=sid)
     if ('420' in sid) or ('69' in sid):
         await sio.emit('chat', {
             'message': 'Nice',
             'sid': '42069'
         })
+    players[sid] = Player('Player ' + sid, sid)
 
 @sio.event
 async def disconnect(sid):
@@ -131,10 +132,7 @@ async def chat(sid, data):
                     emoteImage = emote[0]
                 splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
 
-    await sio.emit('chat', {
-        'sid': sid,
-        'message': ' '.join(splitMessage)
-    })
+    await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
 
 app.router.add_get('/', index)
 app.router.add_static('/', 'public')
