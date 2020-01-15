@@ -60,7 +60,7 @@ async def index(request):
 async def connect(sid, environ):
     print('[CONNECT] ' + sid)
     await sio.emit('objects', [object.getDict() for object in objects], to=sid)
-    await sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' player(s) online</strong>')
+    await sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' player(s) online</strong>', to=sid)
     await sio.emit('join', sid, skip_sid=sid)
     if ('420' in sid) or ('69' in sid):
         await sio.emit('chat', {
