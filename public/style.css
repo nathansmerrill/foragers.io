@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'Roboto_Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto_Mono'), url('fonts/Roboto_Mono/RobotoMono-Regular.ttf');
+}
+
+body {
+    font-family: Roboto_Mono, sans-serif;
+}
+
 .chat {
     color: rgb(255, 255, 255);
     opacity: 0.5;
