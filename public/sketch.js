@@ -9,14 +9,14 @@ let ObjectTypes = {
 };
 
 let images = {
-    'wood': null,
-    'stone': null,
-    'iron': null,
-    'ruby': null,
-    'woodIcon': null,
-    'stoneIcon': null,
-    'ironIcon': null,
-    'rubyIcon': null
+    'wood': [null, 'resources'],
+    'stone': [null, 'resources'],
+    'iron': [null, 'resources'],
+    'ruby': [null, 'resources'],
+    'woodIcon': [null, 'resourceIcons'],
+    'stoneIcon': [null, 'resourceIcons'],
+    'ironIcon': [null, 'resourceIcons'],
+    'rubyIcon': [null, 'resourceIcons']
 };
 
 let resourceSizes = {
@@ -245,7 +245,13 @@ function keyReleased() {
 function preload() {
     for (let key in images) {
         console.log('Loading image ' + key);
-        images[key] = loadImage('assets/img/' + key + '.png');
+        let url = '';
+        if (images[key].length === 2) {
+            url = 'assets/img/' + images[key][1] + '/' + key + '.png';
+        } else {
+            url = 'assets/img/' + key + '.png';
+        }
+        images[key][0] = loadImage(url);
     }
 }
 
@@ -353,7 +359,7 @@ function draw() {
             // Render
             let ox = IGUToPixels(object.x);
             let oy = IGUToPixels(object.y);
-            let img = images[object.type];
+            let img = images[object.type][0];
             let size = IGUToPixels(resourceSizes[object.type]);
 
             image(img, ox - size / 2, oy - size / 2, size, size);
@@ -387,10 +393,10 @@ function draw() {
     rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundIronY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
     rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundRubyY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
 
-    image(images['woodIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconWoodY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
-    image(images['stoneIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconStoneY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
-    image(images['ironIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconIronY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
-    image(images['rubyIcon'], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconRubyY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['woodIcon'][0], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconWoodY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['stoneIcon'][0], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconStoneY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['ironIcon'][0], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconIronY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
+    image(images['rubyIcon'][0], tuning['resourceDisplayIconX'], tuning['resourceDisplayIconRubyY'], tuning['resourceDisplayIconSize'], tuning['resourceDisplayIconSize']);
 
     textAlign(RIGHT, TOP);
     textSize(tuning['resourceDisplayTextSize']);
