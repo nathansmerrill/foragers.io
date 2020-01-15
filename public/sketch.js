@@ -47,6 +47,8 @@ let player = {};
 let chatTextbox;
 let chatDisplay;
 
+let font;
+
 let mapWidth = IGUToPixels(2000);
 let mapHeight = IGUToPixels(2000);
 
@@ -142,7 +144,7 @@ function resizeResourceDisplay() {
 
     tuning['resourceDisplayTextSize'] = IGUToPixels(1.2);
     tuning['resourceDisplayTextX'] = IGUToPixels(2.8, innerWidth);
-    tuning['resourceDisplayTextYOffset'] = -((tuning['resourceDisplayBackgroundHeight'] - tuning['resourceDisplayTextSize']) / 1.5);
+    tuning['resourceDisplayTextYOffset'] = -((tuning['resourceDisplayBackgroundHeight'] - tuning['resourceDisplayTextSize']) / 3.2);
     tuning['resourceDisplayTextWoodY'] = IGUToPixels(tuning['resourceDisplayOffset']*4, innerHeight, tuning['resourceDisplayTextYOffset']);
     tuning['resourceDisplayTextStoneY'] = IGUToPixels(tuning['resourceDisplayOffset']*3, innerHeight, tuning['resourceDisplayTextYOffset']);
     tuning['resourceDisplayTextIronY'] = IGUToPixels(tuning['resourceDisplayOffset']*2, innerHeight, tuning['resourceDisplayTextYOffset']);
@@ -253,11 +255,12 @@ function preload() {
         }
         images[key][0] = loadImage(url);
     }
+    font = loadFont('fonts/Roboto_Mono/RobotoMono-Regular.ttf');
 }
 
 function setup() {
     createCanvas(innerWidth, innerHeight);
-    textFont('Roboto Mono');
+    textFont(font);
 
     chatTextbox = createInput();
     chatTextbox.addClass('chat chat-textbox');
