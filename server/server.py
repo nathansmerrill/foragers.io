@@ -53,7 +53,7 @@ def currentTimeMillis():
     return time.time() * 1000
 
 async def index(request):
-    with open('public/index.html') as f:
+    with open('../public/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
 @sio.event
@@ -137,7 +137,7 @@ async def chat(sid, data):
     await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
 
 app.router.add_get('/', index)
-app.router.add_static('/', 'public')
+app.router.add_static('/', '../public')
 
 if __name__ == '__main__':
     print('[SERVER] started')
@@ -147,9 +147,9 @@ if __name__ == '__main__':
     # ObjectTypes = Enum('ObjectTypes', 'wood stone iron ruby')
     objectTypes = ['wood', 'stone', 'iron', 'ruby']
 
-    with open('server/filter.json', 'r') as filtersFile:
+    with open('filter.json', 'r') as filtersFile:
         filters = json.load(filtersFile)
-    with open('server/emotes.json', 'r') as emotesFile:
+    with open('emotes.json', 'r') as emotesFile:
         emotes = json.load(emotesFile)
 
     print('[SERVER] Generating terrain...')

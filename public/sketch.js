@@ -13,10 +13,50 @@ let images = {
     'stone': [null, 'resources'],
     'iron': [null, 'resources'],
     'ruby': [null, 'resources'],
+
     'woodIcon': [null, 'resourceIcons'],
     'stoneIcon': [null, 'resourceIcons'],
     'ironIcon': [null, 'resourceIcons'],
-    'rubyIcon': [null, 'resourceIcons']
+    'rubyIcon': [null, 'resourceIcons'],
+
+    'woodAxe1': [null, 'tools/axe'],
+    'woodAxe2': [null, 'tools/axe'],
+    'woodAxe3': [null, 'tools/axe'],
+    'stoneAxe1': [null, 'tools/axe'],
+    'stoneAxe2': [null, 'tools/axe'],
+    'stoneAxe3': [null, 'tools/axe'],
+    'ironAxe1': [null, 'tools/axe'],
+    'ironAxe2': [null, 'tools/axe'],
+    'ironAxe3': [null, 'tools/axe'],
+    'rubyAxe1': [null, 'tools/axe'],
+    'rubyAxe2': [null, 'tools/axe'],
+    'rubyAxe3': [null, 'tools/axe'],
+
+    'woodPick1': [null, 'tools/pick'],
+    'woodPick2': [null, 'tools/pick'],
+    'woodPick3': [null, 'tools/pick'],
+    'stonePick1': [null, 'tools/pick'],
+    'stonePick2': [null, 'tools/pick'],
+    'stonePick3': [null, 'tools/pick'],
+    'ironPick1': [null, 'tools/pick'],
+    'ironPick2': [null, 'tools/pick'],
+    'ironPick3': [null, 'tools/pick'],
+    'rubyPick1': [null, 'tools/pick'],
+    'rubyPick2': [null, 'tools/pick'],
+    'rubyPick3': [null, 'tools/pick'],
+
+    'woodSword1': [null, 'tools/sword'],
+    'woodSword2': [null, 'tools/sword'],
+    'woodSword3': [null, 'tools/sword'],
+    'stoneSword1': [null, 'tools/sword'],
+    'stoneSword2': [null, 'tools/sword'],
+    'stoneSword3': [null, 'tools/sword'],
+    'ironSword1': [null, 'tools/sword'],
+    'ironSword2': [null, 'tools/sword'],
+    'ironSword3': [null, 'tools/sword'],
+    'rubySword1': [null, 'tools/sword'],
+    'rubySword2': [null, 'tools/sword'],
+    'rubySword3': [null, 'tools/sword']
 };
 
 let resourceSizes = {
@@ -53,6 +93,9 @@ let mapWidth = IGUToPixels(2000);
 let mapHeight = IGUToPixels(2000);
 
 function isChatOpen() {
+    if (chatTextbox.elt === undefined) {
+        return false;
+    }
     return chatTextbox.elt === document.activeElement;
 }
 
@@ -165,14 +208,18 @@ function resizeChat() {
     tuning['chatFontSize'] = IGUToPixels(0.8);
     tuning['chatTextboxBorderRadius'] = IGUToPixels(1);
 
-    chatTextbox.size(tuning['chatTextboxWidth'], tuning['chatTextboxHeight']);
-    chatTextbox.position(tuning['chatTextboxX'], tuning['chatTextboxY']);
-    chatTextbox.style('font-size', tuning['chatFontSize'] + 'px');
-    chatTextbox.style('border-radius', tuning['chatTextboxBorderRadius'] + 'px');
+    if (chatTextbox !== undefined) {
+        chatTextbox.size(tuning['chatTextboxWidth'], tuning['chatTextboxHeight']);
+        chatTextbox.position(tuning['chatTextboxX'], tuning['chatTextboxY']);
+        chatTextbox.style('font-size', tuning['chatFontSize'] + 'px');
+        chatTextbox.style('border-radius', tuning['chatTextboxBorderRadius'] + 'px');
+    }
 
-    chatDisplay.size(tuning['chatDisplayWidth'], tuning['chatDisplayHeight']);
-    chatDisplay.position(tuning['chatDisplayX'], tuning['chatDisplayY']);
-    chatDisplay.style('font-size', tuning['chatFontSize'] + 'px');
+    if (chatDisplay !== undefined) {
+        chatDisplay.size(tuning['chatDisplayWidth'], tuning['chatDisplayHeight']);
+        chatDisplay.position(tuning['chatDisplayX'], tuning['chatDisplayY']);
+        chatDisplay.style('font-size', tuning['chatFontSize'] + 'px');
+    }
 }
 
 socket.on('objects', function (data) {
