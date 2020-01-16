@@ -91,7 +91,7 @@ function resizeUI() {
 
 function resizePlayers() {
     tuning['playerSize'] = IGUToPixels(3.9);
-    tuning['playerStroke'] = IGUToPixels(2.2);
+    tuning['playerStroke'] = IGUToPixels(0.24);
 
     tuning['handSize'] = IGUToPixels(1.4);
     tuning['handPosition'] = IGUToPixels(1.5);
@@ -304,7 +304,8 @@ function draw() {
 
     // Player
     fill(230, 220, 170);
-    stroke(tuning['playerStroke']);
+    stroke(21, 21, 21);
+    strokeWeight(tuning['playerStroke']);
 
     // Body
     ellipse(innerWidth / 2, innerHeight / 2, tuning['playerSize'], tuning['playerSize']);
