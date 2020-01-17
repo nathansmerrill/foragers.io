@@ -5,4 +5,6 @@ cd $PROJECT
 sed -i 's/port=4000/port=8020/' server/server.py
 sed -i "s/app.router.add_get('\/', index)/# app.router.add_get('\/', index)/" server/server.py
 sed -i "s/app.router.add_static('\/', '..\/public')/# app.router.add_static('\/', '..\/public')/" server/server.py
+sed -i "s/filter.json/server\/filter.json" server/server.py
+sed -i "s/emotes.json/server\/emotes.json" server/server.py
 sed -i 's/localhost:4000/cs.catlin.edu:8020/' public/sketch.js
