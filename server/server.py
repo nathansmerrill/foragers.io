@@ -111,7 +111,6 @@ async def inputs(sid, data):
 @sio.event
 async def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
-    message = data
     splitMessage = data.split()
     # Chat filter
     for i, chatWord in enumerate(splitMessage):
