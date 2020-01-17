@@ -92,19 +92,25 @@ let font;
 let mapWidth = IGUToPixels(2000);
 let mapHeight = IGUToPixels(2000);
 
+function waitUntil(boolFn, callback, delay) {
+    "use strict";
+    // if delay is undefined or is not an integer
+    delay = (typeof (delay) === 'undefined' || isNaN(parseInt(delay, 10))) ? 100 : delay;
+    setTimeout(function () {
+        (boolFn()) ? callback() : waitUntil(boolFn, callback, delay);
+    }, delay);
+}
+
+function waitForChat(callback) {
+    waitUntil(() => {return chatDisplay !== undefined}, callback);
+}
+
 function isChatOpen() {
-    if (chatTextbox.elt === undefined) {
-        return false;
-    }
-    return chatTextbox.elt === document.activeElement;
+    waitForChat(() => {return chatTextbox.elt === document.activeElement});
 }
 
 function chatAppend(text) {
-    if (chatDisplay !== undefined) {
-        chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML;
-    } else {
-        console.log('tried to add to chat but undefined ' + text);
-    }
+    waitForChat(() => {chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML});
 }
 
 /**
