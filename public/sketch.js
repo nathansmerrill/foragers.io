@@ -362,10 +362,13 @@ function draw() {
     push();
 
     translate(innerWidth / 2, innerHeight / 2);
-    rotate(inputs.angle);
+    rotate(inputs.angle + (Math.PI / 2));
 
-    ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
-    ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
+    // ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
+    // ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
+
+    scale(-0.45, 0.45);
+    image(images['rubyPick3'][0], -110, -180);
 
     pop();
 
@@ -455,4 +458,5 @@ function draw() {
     text('100', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextStoneY']);
     text('50', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextIronY']);
     text('10', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextRubyY']);
+
 }

@@ -37,6 +37,7 @@ class Player:
     def getDict(self):
         return self.__dict__
 
+
 # sio = socketio.AsyncServer()
 sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
 app = web.Application()
