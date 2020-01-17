@@ -138,6 +138,10 @@ function resizePlayers() {
 
     tuning['handSize'] = IGUToPixels(1.4);
     tuning['handPosition'] = IGUToPixels(1.5);
+
+    tuning['toolScale'] = IGUToPixels(0.023);
+    tuning['toolX'] = IGUToPixels(-5.73);
+    tuning['toolY'] = IGUToPixels(-10);
 }
 
 function resizeBorder() {
@@ -367,8 +371,8 @@ function draw() {
     // ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
     // ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
 
-    scale(-0.45, 0.45);
-    image(images['rubyPick3'][0], -110, -180);
+    scale(-tuning['toolScale'], tuning['toolScale']);
+    image(images['rubyPick3'][0], -110, -190);
 
     pop();
 
