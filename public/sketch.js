@@ -304,10 +304,14 @@ function preload() {
     for (let key in images) {
         console.log('Loading image ' + key);
         let url = '';
+        let extension = '.png';
+        if (images[key].length === 3) {
+            extension = images[key][2];
+        }
         if (images[key].length === 2) {
-            url = 'assets/img/' + images[key][1] + '/' + key + '.png';
+            url = 'assets/img/' + images[key][1] + '/' + key + extension;
         } else {
-            url = 'assets/img/' + key + '.png';
+            url = 'assets/img/' + key + extension;
         }
         images[key][0] = loadImage(url);
     }
