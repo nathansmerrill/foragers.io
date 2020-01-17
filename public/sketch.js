@@ -268,7 +268,7 @@ socket.on('leave', function(data) {
 });
 
 socket.on('display', function(data) {
-    console.log('displaying ' + data);
+    console.log('Displaying ' + data);
     chatAppend(data);
 });
 

@@ -66,10 +66,7 @@ async def connect(sid, environ):
                    + ' online', to=sid)
     await sio.emit('join', sid, skip_sid=sid)
     if ('420' in sid) or ('69' in sid):
-        await sio.emit('chat', {
-            'message': 'Nice',
-            'sid': '42069'
-        })
+        await sio.emit('display', 'Nice')
     players[sid] = Player('Player ' + sid, sid)
 
 @sio.event
