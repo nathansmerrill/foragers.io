@@ -1,13 +1,5 @@
 let socket = io.connect('http://localhost:4000');
 
-// Javascript doesn't have enums so...
-let ObjectTypes = {
-    WOOD: 0,
-    STONE: 1,
-    METAL: 2,
-    RUBY: 3
-};
-
 let images = {
     'wood': [null, 'resources'],
     'stone': [null, 'resources'],

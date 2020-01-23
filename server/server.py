@@ -105,6 +105,8 @@ async def inputs(sid, data):
     if player.y > mapHeight:
         player.y = mapHeight
 
+
+
     player.move()
     await sio.emit('player', player.getDict())
 
