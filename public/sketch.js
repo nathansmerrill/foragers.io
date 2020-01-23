@@ -92,43 +92,6 @@ let font;
 let mapWidth = IGUToPixels(2000);
 let mapHeight = IGUToPixels(2000);
 
-function waitUntil(boolFn, callback, delay) {
-    "use strict";
-    // if delay is undefined or is not an integer
-    delay = (typeof (delay) === 'undefined' || isNaN(parseInt(delay, 10))) ? 100 : delay;
-    setTimeout(function () {
-        (boolFn()) ? callback() : waitUntil(boolFn, callback, delay);
-    }, delay);
-}
-
-function waitForChat(callback) {
-    waitUntil(() => {return chatDisplay !== undefined}, callback);
-}
-
-function isChatOpen() {
-    waitForChat(() => {return chatTextbox.elt === document.activeElement});
-}
-
-function chatAppend(text) {
-    waitForChat(() => {chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML});
-}
-
-/**
- * @return {number}
- */
-function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
-    let biggerSide = innerWidth;
-    // if (innerHeight > biggerSide) {
-    //     biggerSide = innerHeight
-    // }
-    let basePixels = igu * (biggerSide / 100);
-    if (oppositeEdge === 0) {
-        return basePixels + offset;
-    } else {
-        return oppositeEdge - basePixels - offset;
-    }
-}
-
 function resizeUI() {
     resizeCanvas(innerWidth, innerHeight);
 
@@ -232,6 +195,44 @@ function resizeChat() {
     }
 }
 
+function waitUntil(boolFn, callback, delay) {
+    "use strict";
+    // if delay is undefined or is not an integer
+    delay = (typeof (delay) === 'undefined' || isNaN(parseInt(delay, 10))) ? 100 : delay;
+    setTimeout(function () {
+        (boolFn()) ? callback() : waitUntil(boolFn, callback, delay);
+    }, delay);
+}
+
+function waitForChat(callback) {
+    waitUntil(() => {return chatDisplay !== undefined}, callback);
+}
+
+function isChatOpen() {
+    // waitForChat(() => {return chatTextbox.elt === document.activeElement});
+    return chatTextbox.elt === document.activeElement;
+}
+
+function chatAppend(text) {
+    waitForChat(() => {chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML});
+}
+
+/**
+ * @return {number}
+ */
+function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
+    let biggerSide = innerWidth;
+    // if (innerHeight > biggerSide) {
+    //     biggerSide = innerHeight
+    // }
+    let basePixels = igu * (biggerSide / 100);
+    if (oppositeEdge === 0) {
+        return basePixels + offset;
+    } else {
+        return oppositeEdge - basePixels - offset;
+    }
+}
+
 socket.on('objects', function (data) {
     // console.log('objects recieved');
 
@@ -274,11 +275,13 @@ socket.on('display', function(data) {
 
 function keyPressed() {
     if (!isChatOpen()) {
+        console.log('adding input chat not open');
         inputs['keyboard'].push(key);
     }
     // Chat
     if (key === 'Enter') {
         if (isChatOpen()) {
+            console.log('sending message');
             let message = chatTextbox.value();
             if (message !== '') {
                 socket.emit('chat', chatTextbox.value());
@@ -286,6 +289,7 @@ function keyPressed() {
             }
             chatTextbox.elt.blur();
         } else {
+            console.log('opening chat');
             chatTextbox.elt.focus();
             inputs.keyboard = [];
         }
