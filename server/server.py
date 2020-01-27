@@ -150,6 +150,9 @@ async def inputs(sid, data):
 @sio.event
 async def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
+    if '<' in data and '>' in data:
+        await sio.emit('display', 'i ams a proes haccerman')
+        return
     splitMessage = data.split()
     # Chat filter
     for i, chatWord in enumerate(splitMessage):

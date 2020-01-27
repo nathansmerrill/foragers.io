@@ -209,9 +209,6 @@ function chatAppend(text) {
     waitForChat(() => {chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML});
 }
 
-/**
- * @return {number}
- */
 function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
     let biggerSide = innerWidth;
     // if (innerHeight > biggerSide) {
