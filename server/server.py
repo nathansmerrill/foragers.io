@@ -111,7 +111,6 @@ async def inputs(sid, data):
 
     # print(data)
     player = players[sid]
-    oldPlayer = player
     movementSpeed = player.getMovementSpeed()
     if 'a' in data['keyboard']:
         player.x -= movementSpeed
