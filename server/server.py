@@ -157,7 +157,7 @@ async def inputs(sid, data):
 async def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
     if '<' in data and '>' in data:
-        await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> isa as proess hacccerman</span>')
+        await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
         return
     splitMessage = data.split()
     # Chat filter
