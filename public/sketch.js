@@ -84,7 +84,7 @@ let font;
 let mapWidth = IGUToPixels(2000);
 let mapHeight = IGUToPixels(2000);
 
-function resizeUI() {
+function windowResized() {
     resizeCanvas(innerWidth, innerHeight);
 
     resizePlayers();
@@ -321,11 +321,7 @@ function setup() {
     chatDisplay = createP();
     chatDisplay.addClass('chat chat-display');
 
-    resizeUI();
-}
-
-function windowResized() {
-    resizeUI();
+    windowResized();
 }
 
 function update() {

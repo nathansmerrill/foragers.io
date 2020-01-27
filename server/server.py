@@ -50,6 +50,12 @@ class Player:
         self.name = name
         self.x = 1  # random.uniform(0, 40000)
         self.y = 2  # random.uniform(0, 40000)
+        self.resources = {
+            'wood': 0,
+            'stone': 0,
+            'iron': 0,
+            'ruby': 0
+        }
         self.angle = 0
         self.speed = 1
         self.sid = sid
