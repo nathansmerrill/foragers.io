@@ -164,6 +164,7 @@ async def chat(sid, data):
                         splitMessage = replacementWord.split()
                     else:
                         splitMessage[i] = replacementWord
+
         # Chat emotes
         for emote in emotes:
             if chatWord == emote[0]:
