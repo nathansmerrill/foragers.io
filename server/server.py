@@ -3,7 +3,35 @@
 from aiohttp import web
 import aiohttp_cors
 import socketio
-import random, json, time
+import random, json, time, math, numpy
+
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def len(self):
+        return math.sqrt(
+            (self.x ** 2) +
+            (self.y ** 2)
+        )
+
+    def add(self, vector):
+        self.x += vector.x
+        self.y += vector.y
+
+    def multiply(self, value):
+        self.x *= value
+        self.y *= value
+
+    def divide(self, value):
+        if value != 0:
+            self.x /= value
+            self.y /= value
+
+    def normalize(self, value=1):
+        self.divide(self.len())
+        self.multiply(value)
 
 class Object:
     def __init__(self, type, x, y):
@@ -28,8 +56,8 @@ class Player:
         self.move()
 
     def getMovementSpeed(self):
-        return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.02
-        # return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.1
+        return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.03
+        # return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.5
 
     def move(self):
         self.lastMoved = currentTimeMillis()
@@ -52,6 +80,16 @@ for resource in app.router._resources:
 def currentTimeMillis():
     # return int(round(time.time() * 1000))
     return time.time() * 1000
+
+# def cart2pol(x, y):
+#     dist = numpy.sqrt(x**2 + y**2)
+#     angle = numpy.arctan2(y, x)
+#     return (dist, angle)
+#
+# def pol2cart(dist, angle):
+#     x = dist * numpy.cos(angle)
+#     y = dist * numpy.sin(angle)
+#     return (x, y)
 
 async def index(request):
     with open('../public/index.html') as f:
@@ -105,7 +143,30 @@ async def inputs(sid, data):
     if player.y > mapHeight:
         player.y = mapHeight
 
-
+    # for object in objects:
+    #     objectSize = objectTypes[object.type]
+    #     if player.x - object.x <= objectSize and player.y - object.y <= objectSize:
+    #         print('object close')
+    #         dist = math.sqrt(
+    #             ((player.x - object.x) ** 2) +
+    #             ((player.y - object.y) ** 2)
+    #         )
+    #         if dist <= objectSize:
+    #             distX = player.x - object.x
+    #             distY = player.y - object.y
+    #             (dist, angle) = cart2pol(distX, distY)
+    #             (newXOffset, newYOffset) = pol2cart(objectSize, angle)
+    #             player.x = object.x + newXOffset
+    #             player.y = object.y + newYOffset
+    for object in objects:
+        objectSize = objectTypes[object.type]
+        if abs(player.x - object.x) <= objectSize and abs(player.y - object.y) <= objectSize:
+            # print('close to object')
+            objectToPlayer = Vector(player.x - object.x, player.y - object.y)
+            if objectToPlayer.len() <= objectSize:
+                objectToPlayer.normalize(objectSize)
+                player.x = object.x + objectToPlayer.x
+                player.y = object.y + objectToPlayer.y
 
     player.move()
     await sio.emit('player', player.getDict())
@@ -143,8 +204,13 @@ if __name__ == '__main__':
     players = {}
     mapWidth = 2000
     mapHeight = 2000
-    # ObjectTypes = Enum('ObjectTypes', 'wood stone iron ruby')
-    objectTypes = ['wood', 'stone', 'iron', 'ruby']
+    # This maps the resource type to the hitbox size
+    objectTypes = {
+        'wood': 8.5,
+        'stone': 5,
+        'iron': 5,
+        'ruby': 5
+    }
 
     with open('filter.json', 'r') as filtersFile:
         filters = json.load(filtersFile)
@@ -155,10 +221,12 @@ if __name__ == '__main__':
     objects = []
     for i in range(0, 10000):
         objects.append(Object(
-            random.choice(objectTypes),
+            random.choice(list(objectTypes.keys())),
             random.uniform(0, mapWidth),
             random.uniform(0, mapHeight)
         ))
+    # objects.append(Object('wood', 40, 40))
+    # objects.append(Object('ruby', 30, 49))
     print('[SERVER] Terrain generation complete')
 
     web.run_app(app, port=4000)
