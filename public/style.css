@@ -11,7 +11,6 @@ body {
 
 .chat {
     color: rgb(255, 255, 255);
-    opacity: 0.5;
 }
 .chat:focus {
     outline:0;
@@ -21,6 +20,7 @@ body {
     background-color: rgba(29,32,29,0.8);
     border-color: rgba(29,32,29,0.8);
     padding-left: 0.3%;
+    opacity: 0.5;
 }
 
 .chat-display {
@@ -30,6 +30,7 @@ body {
     flex-direction: column-reverse;
     word-wrap: break-word;
     scroll-padding: 25%;
+    opacity: 0.8;
 }
 .chat-line {
     margin-bottom: 1%;
