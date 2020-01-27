@@ -56,7 +56,7 @@ class Player:
         self.move()
 
     def getMovementSpeed(self):
-        return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.03
+        return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.02
         # return (self.speed * (currentTimeMillis() - self.lastMoved)) * 0.5
 
     def move(self):
