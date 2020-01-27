@@ -123,6 +123,7 @@ async def inputs(sid, data):
     player.angle = data['angle']
 
     # Movement validation
+    # World borders
     if player.x < 0:
         player.x = 0
     if player.x > mapWidth:
@@ -132,6 +133,7 @@ async def inputs(sid, data):
     if player.y > mapHeight:
         player.y = mapHeight
 
+    # Objects
     for object in objects:
         objectSize = objectTypes[object.type]
         if abs(player.x - object.x) <= objectSize and abs(player.y - object.y) <= objectSize:
