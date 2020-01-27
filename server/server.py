@@ -3,7 +3,7 @@
 from aiohttp import web
 import aiohttp_cors
 import socketio
-import random, json, time, math, numpy
+import random, json, time, math
 
 class Vector:
     def __init__(self, x, y):
