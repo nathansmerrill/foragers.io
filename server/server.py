@@ -81,16 +81,6 @@ def currentTimeMillis():
     # return int(round(time.time() * 1000))
     return time.time() * 1000
 
-# def cart2pol(x, y):
-#     dist = numpy.sqrt(x**2 + y**2)
-#     angle = numpy.arctan2(y, x)
-#     return (dist, angle)
-#
-# def pol2cart(dist, angle):
-#     x = dist * numpy.cos(angle)
-#     y = dist * numpy.sin(angle)
-#     return (x, y)
-
 async def index(request):
     with open('../public/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
@@ -143,21 +133,6 @@ async def inputs(sid, data):
     if player.y > mapHeight:
         player.y = mapHeight
 
-    # for object in objects:
-    #     objectSize = objectTypes[object.type]
-    #     if player.x - object.x <= objectSize and player.y - object.y <= objectSize:
-    #         print('object close')
-    #         dist = math.sqrt(
-    #             ((player.x - object.x) ** 2) +
-    #             ((player.y - object.y) ** 2)
-    #         )
-    #         if dist <= objectSize:
-    #             distX = player.x - object.x
-    #             distY = player.y - object.y
-    #             (dist, angle) = cart2pol(distX, distY)
-    #             (newXOffset, newYOffset) = pol2cart(objectSize, angle)
-    #             player.x = object.x + newXOffset
-    #             player.y = object.y + newYOffset
     for object in objects:
         objectSize = objectTypes[object.type]
         if abs(player.x - object.x) <= objectSize and abs(player.y - object.y) <= objectSize:
