@@ -248,10 +248,6 @@ socket.on('player', function (data) {
     }
 });
 
-socket.on('join', function(data) {
-   chatAppend('<strong>' + data + '</strong> joined');
-});
-
 socket.on('leave', function(data) {
     delete players[data];
     chatAppend('<strong>' + data + '</strong> left');
