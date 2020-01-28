@@ -236,15 +236,10 @@ socket.on('player', function (data) {
     // console.log(parsedData);
     if (data.sid === socket.id) {
         // console.log('this player updated');
-        player.x = data.x;
-        player.y = data.y;
+        player = data
     } else {
         // console.log('other player updated with sid ' + parsedData.sid);
-        players[data.sid] = {
-            x: data.x,
-            y: data.y,
-            angle: data.angle
-        }
+        players[data.sid] = data;
     }
 });
 
