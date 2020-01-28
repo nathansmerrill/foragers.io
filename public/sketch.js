@@ -276,6 +276,7 @@ function keyPressed() {
             }
             chatTextbox.elt.blur();
         } else {
+            console.log('opening chat');
             chatTextbox.elt.focus();
             inputs.keyboard = [];
         }

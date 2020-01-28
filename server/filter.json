@@ -70,5 +70,30 @@
     "replacements": [
       "donkey"
     ]
+  },
+  {
+    "blocked": [
+      "dick",
+      "cock",
+      "ball",
+      "balls",
+      "penis"
+    ],
+    "replacements": [
+      "richard",
+      "rooster",
+      "sticc"
+    ]
+  },
+  {
+    "blocked": [
+      "thot",
+      "hoe"
+    ],
+    "replacements": [
+      "human",
+      "woman",
+      "sweetheart"
+    ]
   }
 ]
