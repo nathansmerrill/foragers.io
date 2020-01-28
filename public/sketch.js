@@ -264,13 +264,11 @@ socket.on('display', function(data) {
 
 function keyPressed() {
     if (!isChatOpen()) {
-        console.log('adding input chat not open');
         inputs['keyboard'].push(key);
     }
     // Chat
     if (key === 'Enter') {
         if (isChatOpen()) {
-            console.log('sending message');
             let message = chatTextbox.value();
             if (message !== '') {
                 socket.emit('chat', chatTextbox.value());
@@ -278,7 +276,6 @@ function keyPressed() {
             }
             chatTextbox.elt.blur();
         } else {
-            console.log('opening chat');
             chatTextbox.elt.focus();
             inputs.keyboard = [];
         }
