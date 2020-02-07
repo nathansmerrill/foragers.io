@@ -11,10 +11,10 @@ class Vector:
         self.y = y
 
     def len(self):
-        return math.sqrt(
-            (self.x ** 2) +
-            (self.y ** 2)
-        )
+        return math.sqrt(self.lenSquared())
+
+    def lenSquared(self):
+        return (self.x ** 2) + (self.y ** 2)
 
     def add(self, vector):
         self.x += vector.x
@@ -56,6 +56,7 @@ class Player:
             'iron': 0,
             'ruby': 0
         }
+        self.health = 100
         self.angle = 0
         self.speed = 1
         self.sid = sid

@@ -90,6 +90,7 @@ function windowResized() {
     resizePlayers();
     resizeBorder();
     resizeResourceDisplay();
+    resizeHealthDisplay();
     resizeChat();
 }
 
@@ -97,7 +98,7 @@ function resizePlayers() {
     tuning['playerSize'] = IGUToPixels(3.9);
     tuning['playerStroke'] = IGUToPixels(0.24);
 
-    tuning['handSize'] = IGUToPixels(1.4);
+    tuning['handSize'] = IGUToPixels(1.2);
     tuning['handPosition'] = IGUToPixels(1.5);
 
     tuning['toolScale'] = IGUToPixels(0.023);
@@ -157,6 +158,12 @@ function resizeResourceDisplay() {
     tuning['resourceDisplayTextStoneY'] = IGUToPixels(tuning['resourceDisplayOffset']*3, innerHeight, tuning['resourceDisplayTextYOffset']);
     tuning['resourceDisplayTextIronY'] = IGUToPixels(tuning['resourceDisplayOffset']*2, innerHeight, tuning['resourceDisplayTextYOffset']);
     tuning['resourceDisplayTextRubyY'] = IGUToPixels(tuning['resourceDisplayOffset'], innerHeight, tuning['resourceDisplayTextYOffset']);
+}
+
+function resizeHealthDisplay() {
+    tuning['healthHeight'] = IGUToPixels(1);
+    tuning['healthY'] = IGUToPixels(2.8, innerHeight);
+
 }
 
 function resizeChat() {
@@ -356,11 +363,14 @@ function draw() {
     translate(innerWidth / 2, innerHeight / 2);
     rotate(inputs.angle + (Math.PI / 2));
 
-    // ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
-    // ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
-
+    push();
     scale(-tuning['toolScale'], tuning['toolScale']);
     image(images['rubyPick3'][0], -110, -190);
+    pop();
+
+    rotate(-(Math.PI / 2));
+    ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
+    ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
 
     pop();
 
@@ -422,17 +432,12 @@ function draw() {
 
     pop();
 
-    textSize(16);
-
-    fill(255);
-    noStroke();
-    // text(round(player.x*10)/10, 2, 35);
-    // text(round(player.y*10)/10, 2, 70);
+    rect(0, 0, player['health'], 20);
 
     // Resource UI
     fill(0,100);
+    noStroke();
 
-    // New smaller resources
     rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundWoodY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
     rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundStoneY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
     rect(tuning['resourceDisplayBackgroundX'], tuning['resourceDisplayBackgroundIronY'], tuning['resourceDisplayBackgroundWidth'], tuning['resourceDisplayBackgroundHeight'], tuning['resourceDisplayBackgroundRounding']);
@@ -450,5 +455,4 @@ function draw() {
     text('100', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextStoneY']);
     text('50', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextIronY']);
     text('10', tuning['resourceDisplayTextX'], tuning['resourceDisplayTextRubyY']);
-
 }
