@@ -71,6 +71,8 @@ class Player:
     def getDict(self):
         return self.__dict__
 
+def calcBellCurve(x, offset, width, height):
+    return height * math.exp(-(math.pow(x-offset) / (width)))
 
 # sio = socketio.AsyncServer()
 sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
