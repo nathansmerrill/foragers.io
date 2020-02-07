@@ -391,8 +391,14 @@ function draw() {
         push();
 
         translate(IGUToPixels(drawPlayer.x), IGUToPixels(drawPlayer.y));
-        rotate(drawPlayer.angle);
+        rotate(drawPlayer.angle + (Math.PI / 2));
 
+        push();
+        scale(-tuning['toolScale'], tuning['toolScale']);
+        image(images['rubyPick3'][0], -110, -190);
+        pop();
+
+        rotate(-(Math.PI / 2));
         ellipse(tuning['handPosition'], tuning['handPosition'], tuning['handSize'], tuning['handSize']);
         ellipse(tuning['handPosition'], -tuning['handPosition'], tuning['handSize'], tuning['handSize']);
 

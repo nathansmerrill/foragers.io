@@ -72,6 +72,9 @@ class Player:
     def getDict(self):
         return self.__dict__
 
+def getBellCurve():
+    pass
+
 
 # sio = socketio.AsyncServer()
 sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
