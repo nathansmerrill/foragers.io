@@ -298,13 +298,13 @@ function preload() {
             extension = images[key][2];
         }
         if (images[key].length === 2) {
-            url = 'assets/img/' + images[key][1] + '/' + key + extension;
+            url = '/static/assets/img/' + images[key][1] + '/' + key + extension;
         } else {
-            url = 'assets/img/' + key + extension;
+            url = '/static/assets/img/' + key + extension;
         }
         images[key][0] = loadImage(url);
     }
-    font = loadFont('fonts/Roboto_Mono/RobotoMono-Regular.ttf');
+    font = loadFont('/static/fonts/Roboto_Mono/RobotoMono-Regular.ttf');
 }
 
 function setup() {

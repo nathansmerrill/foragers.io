@@ -1,8 +1,6 @@
 #!/usr/bin/python3 -u
 
-from aiohttp import web
-import aiohttp_cors
-import socketio
+import socketio, eventlet
 import random, json, time, math
 
 class Vector:
@@ -71,46 +69,37 @@ class Player:
     def getDict(self):
         return self.__dict__
 
-
-# sio = socketio.AsyncServer()
-sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
-app = web.Application()
-sio.attach(app)
-
-cors = aiohttp_cors.setup(app)
-for resource in app.router._resources:
-    if resource.raw_match('/socket.io/'):
-        continue
-    cors.add(resource, {'*': aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers='*', allow_headers='*')})
+sio = socketio.Server(_mode='eventlet')
+staticFiles = {
+    '/': '../public/index.html',
+    '/static': '../public'
+}
+app = socketio.WSGIApp(sio, static_files=staticFiles)
 
 def currentTimeMillis():
     # return int(round(time.time() * 1000))
     return time.time() * 1000
 
-async def index(request):
-    with open('../public/index.html') as f:
-        return web.Response(text=f.read(), content_type='text/html')
-
 @sio.event
-async def connect(sid, environ):
+def connect(sid, environ):
     print('[CONNECT] ' + sid)
-    await sio.emit('objects', [object.getDict() for object in objects], to=sid)
-    await sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' ' +
+    sio.emit('objects', [object.getDict() for object in objects], to=sid)
+    sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' ' +
                    ('player' if len(players) == 1 else 'players')
                    + ' online', to=sid)
-    await sio.emit('display', '<strong>' + sid + '</strong> joined', skip_sid=sid)
+    sio.emit('display', '<strong>' + sid + '</strong> joined', skip_sid=sid)
     if ('420' in sid) or ('69' in sid):
-        await sio.emit('display', 'Nice')
+        sio.emit('display', 'Nice')
     players[sid] = Player('Player ' + sid, sid)
 
 @sio.event
-async def disconnect(sid):
+def disconnect(sid):
     print('[DISCONNECT] ' + sid)
     players.pop(sid, None)
-    await sio.emit('leave', sid)
+    sio.emit('leave', sid)
 
 @sio.event
-async def inputs(sid, data):
+def inputs(sid, data):
     # print('Received inputs from ' + sid)
     # print(data['keyboard'])
     # Player Input
@@ -151,13 +140,13 @@ async def inputs(sid, data):
                 player.y = object.y + objectToPlayer.y
 
     player.move()
-    await sio.emit('player', player.getDict())
+    sio.emit('player', player.getDict())
 
 @sio.event
-async def chat(sid, data):
+def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
     if '<' in data and '>' in data:
-        await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
+        sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
         return
     splitMessage = data.split()
     # Chat filter
@@ -180,10 +169,7 @@ async def chat(sid, data):
                     emoteImage = emote[0]
                 splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
 
-    await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
-
-app.router.add_get('/', index)
-app.router.add_static('/', '../public')
+    sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
 
 if __name__ == '__main__':
     print('[SERVER] started')
@@ -215,4 +201,4 @@ if __name__ == '__main__':
     # objects.append(Object('ruby', 30, 49))
     print('[SERVER] Terrain generation complete')
 
-    web.run_app(app, port=4000)
+    eventlet.wsgi.server(eventlet.listen(('', 4000)), app)
