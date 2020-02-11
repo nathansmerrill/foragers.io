@@ -167,7 +167,7 @@ def chat(sid, data):
                     emoteImage = emote[2]
                 else:
                     emoteImage = emote[0]
-                splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
+                splitMessage[i] = "<img class='chat-emote' src='/static/assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
 
     sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
 
