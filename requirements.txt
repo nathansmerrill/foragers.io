@@ -1,3 +1,2 @@
 python-socketio
-aiohttp
-aiohttp_cors
+eventlet
