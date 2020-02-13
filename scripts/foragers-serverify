@@ -1,13 +1,21 @@
 #!/bin/bash
 
-PROJECT="/home/merrilln/foragers.io"
-cd $PROJECT
+cd /home/merrilln/foragers.io
+
+# Listen on port 8020
 sed -i "s/eventlet.listen(('', 4000))/eventlet.listen(('', 8020))/" server/server.py
+# Connect to cs.catlin.edu port 8020
+sed -i 's/localhost:4000/cs.catlin.edu:8020/' public/sketch.js
+# Comment out staticFiles to server
 sed -ie '/staticFiles = {/,+3 s/^/# /' server/server.py
+# Don't serve static files when creating Server
 sed -i 's/, static_files=staticFiles//' server/server.py
+# Since in the production environment the project is run from the project root,
+# the paths of files to read need to be relative to the it
 sed -i "s/filter.json/server\/filter.json/" server/server.py
 sed -i "s/emotes.json/server\/emotes.json/" server/server.py
-sed -i 's/localhost:4000/cs.catlin.edu:8020/' public/sketch.js
+# Since static files are served via apache in production,
+# they aren't in the static folder
 sed -i 's/\/static\///' server/server.py
 sed -i 's/\/static\///' public/sketch.js
 sed -i 's/\/static\///' public/index.html
