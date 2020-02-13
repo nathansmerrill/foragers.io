@@ -54,6 +54,7 @@ class Player:
             'iron': 0,
             'ruby': 0
         }
+        self.inputs = []
         self.angle = 0
         self.speed = 1
         self.sid = sid

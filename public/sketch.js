@@ -208,7 +208,9 @@ function waitUntil(boolFn, callback, delay) {
 }
 
 function waitForChat(callback) {
-    waitUntil(() => {return chatDisplay !== undefined}, callback);
+    waitUntil(() => {
+        return chatDisplay !== undefined
+    }, callback);
 }
 
 function isChatOpen() {
@@ -217,7 +219,9 @@ function isChatOpen() {
 }
 
 function chatAppend(text) {
-    waitForChat(() => {chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML});
+    waitForChat(() => {
+        chatDisplay.elt.innerHTML = '<span class="chat-line">' + text + '</span>' + chatDisplay.elt.innerHTML
+    });
 }
 
 function IGUToPixels(igu, oppositeEdge = 0, offset = 0) {
