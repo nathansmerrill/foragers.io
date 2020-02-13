@@ -1,4 +1,8 @@
-let socket = io.connect('http://localhost:4000');
+let socket = io.connect('http://localhost:4000',
+    {
+        transports: ['websocket', 'polling', 'flashsocket']
+    }
+);
 
 let images = {
     'wood': [null, 'resources'],
