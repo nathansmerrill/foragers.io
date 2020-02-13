@@ -6,7 +6,7 @@ cd /home/merrilln/foragers.io
 sed -i "s/eventlet.listen(('', 4000))/eventlet.listen(('', 8020))/" server/server.py
 # Connect to cs.catlin.edu port 8020
 sed -i 's/localhost:4000/cs.catlin.edu:8020/' public/sketch.js
-# Comment out staticFiles to server
+# Comment out staticFiles to serve
 sed -ie '/staticFiles = {/,+3 s/^/# /' server/server.py
 # Don't serve static files when creating Server
 sed -i 's/, static_files=staticFiles//' server/server.py
