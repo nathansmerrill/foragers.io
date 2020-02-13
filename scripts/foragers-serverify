@@ -2,7 +2,7 @@
 
 PROJECT="/home/merrilln/foragers.io"
 cd $PROJECT
-sed -i 's/eventlet.listen(('', 4000))/eventlet.listen(('', 8020))/' server/server.py
+sed -i "s/eventlet.listen(('', 4000))/eventlet.listen(('', 8020))/" server/server.py
 sed -ie '/staticFiles = {/,+3 s/^/# /' server/server.py
 sed -i 's/, static_files=staticFiles//' server/server.py
 sed -i "s/filter.json/server\/filter.json/" server/server.py
