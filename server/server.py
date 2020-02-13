@@ -69,7 +69,7 @@ class Player:
     def getDict(self):
         return self.__dict__
 
-sio = socketio.Server(async_mode='eventlet')
+sio = socketio.Server(async_mode='eventlet', cors_allowed_origins='*')
 staticFiles = {
     '/': '../public/index.html',
     '/static': '../public'
