@@ -192,12 +192,6 @@ def getRandomObject(x, y):
         return 'stone'
     return 'wood'
 
-
-def dist(x1, y1, x2, y2):
-    dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-    return dist
-
-
 if __name__ == '__main__':
     print('[SERVER] Server started')
     players = {}
@@ -229,18 +223,14 @@ if __name__ == '__main__':
             if Vector(x - o.x, y - o.y).len() < 6:
                 closeLimit = True
         if not closeLimit:
-            if random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and random.uniform(0, 1) < calcBellCurve(y,
-                                                                                                                  1000,
-                                                                                                                  1000000,
-                                                                                             1):
+            if (random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and
+                    random.uniform(0, 1) < calcBellCurve(y, 1000, 1000000, 1)):
                 objects.append(Object(
                     getRandomObject(x, y),
                     x,
                     y
                 ))
 
-    # objects.append(Object('wood', 40, 40))
-    # objects.append(Object('ruby', 30, 49))
     print('[SERVER] Terrain generation complete')
 
     eventlet.wsgi.server(eventlet.listen(('', 4000)), app)
