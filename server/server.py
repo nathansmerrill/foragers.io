@@ -5,6 +5,7 @@ import aiohttp_cors
 import socketio
 import random, json, time, math
 
+
 class Vector:
     def __init__(self, x, y):
         self.x = x
@@ -33,6 +34,7 @@ class Vector:
         self.divide(self.len())
         self.multiply(value)
 
+
 class Object:
     def __init__(self, type, x, y):
         self.type = type
@@ -44,6 +46,7 @@ class Object:
         # return str(self.__dict__)
         return self.__dict__
         # return vars(self)
+
 
 class Player:
     def __init__(self, name, sid):
@@ -71,8 +74,10 @@ class Player:
     def getDict(self):
         return self.__dict__
 
+
 def calcBellCurve(x, offset, width, height):
-    return height * math.exp(-(math.pow(x-offset) / (width)))
+    return height * math.exp(-(math.pow(x - offset, 2) / (width)))
+
 
 # sio = socketio.AsyncServer()
 sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
@@ -83,15 +88,19 @@ cors = aiohttp_cors.setup(app)
 for resource in app.router._resources:
     if resource.raw_match('/socket.io/'):
         continue
-    cors.add(resource, {'*': aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers='*', allow_headers='*')})
+    cors.add(resource,
+             {'*': aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers='*', allow_headers='*')})
+
 
 def currentTimeMillis():
     # return int(round(time.time() * 1000))
     return time.time() * 1000
 
+
 async def index(request):
     with open('../public/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
+
 
 @sio.event
 async def connect(sid, environ):
@@ -105,11 +114,13 @@ async def connect(sid, environ):
         await sio.emit('display', 'Nice')
     players[sid] = Player('Player ' + sid, sid)
 
+
 @sio.event
 async def disconnect(sid):
     print('[DISCONNECT] ' + sid)
     players.pop(sid, None)
     await sio.emit('leave', sid)
+
 
 @sio.event
 async def inputs(sid, data):
@@ -155,11 +166,13 @@ async def inputs(sid, data):
     player.move()
     await sio.emit('player', player.getDict())
 
+
 @sio.event
 async def chat(sid, data):
     print('[CHAT] ' + sid + ': ' + data)
     if '<' in data and '>' in data:
-        await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
+        await sio.emit('display',
+                       '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
         return
     splitMessage = data.split()
     # Chat filter
@@ -182,13 +195,38 @@ async def chat(sid, data):
                     emoteImage = emote[0]
                 splitMessage[i] = "<img class='chat-emote' src='assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
 
-    await sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
+    await sio.emit('display',
+                   '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
+
 
 app.router.add_get('/', index)
 app.router.add_static('/', '../public')
 
+
+def getRandomObject(x, y):
+    z = random.uniform(0, 100)
+    ix = calcBellCurve(x, 1000, 422500, 10)
+    iy = calcBellCurve(y, 1000, 422500, 10)
+    if ix > z and iy > z:
+        return 'ruby'
+    ix += calcBellCurve(x, 1000, 1200000, 20)
+    iy += calcBellCurve(y, 1000, 1200000, 20)
+    if ix > z and iy > z:
+        return 'iron'
+    ix += calcBellCurve(x, 1000, 3240000, 50)
+    iy += calcBellCurve(y, 1000, 3240000, 50)
+    if ix > z and iy > z:
+        return 'stone'
+    return 'wood'
+
+
+def dist(x1, y1, x2, y2):
+    dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    return dist
+
+
 if __name__ == '__main__':
-    print('[SERVER] started')
+    print('[SERVER] Server started')
     players = {}
     mapWidth = 2000
     mapHeight = 2000
@@ -207,12 +245,27 @@ if __name__ == '__main__':
 
     print('[SERVER] Generating terrain...')
     objects = []
-    for i in range(0, 10000):
-        objects.append(Object(
-            random.choice(list(objectTypes.keys())),
-            random.uniform(0, mapWidth),
-            random.uniform(0, mapHeight)
-        ))
+    for i in range(0, 8000):
+        if i % 400 == 0:
+            # print('[SERVER] Generating Terrain: ', i/80, '% [', '█'*int(i/400),'*'*(20-int(i/400)), ']')
+            print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
+        x = random.uniform(0, mapWidth)
+        y = random.uniform(0, mapHeight)
+        closeLimit = False
+        for o in objects:
+            if Vector(x - o.x, y - o.y).len() < 6:
+                closeLimit = True
+        if not closeLimit:
+            if random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and random.uniform(0, 1) < calcBellCurve(y,
+                                                                                                                  1000,
+                                                                                                                  1000000,
+                                                                                                                  1):
+                objects.append(Object(
+                    getRandomObject(x, y),
+                    x,
+                    y
+                ))
+
     # objects.append(Object('wood', 40, 40))
     # objects.append(Object('ruby', 30, 49))
     print('[SERVER] Terrain generation complete')
