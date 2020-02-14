@@ -54,7 +54,6 @@ class Player:
             'iron': 0,
             'ruby': 0
         }
-        self.inputs = []
         self.angle = 0
         self.speed = 1
         self.sid = sid
@@ -69,6 +68,10 @@ class Player:
 
     def getDict(self):
         return self.__dict__
+
+
+def calcBellCurve(x, offset, width, height):
+    return height * math.exp(-(math.pow(x - offset, 2) / (width)))
 
 sio = socketio.Server(async_mode='eventlet', cors_allowed_origins='*')
 staticFiles = {
@@ -172,8 +175,31 @@ def chat(sid, data):
 
     sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
 
+
+def getRandomObject(x, y):
+    z = random.uniform(0, 100)
+    ix = calcBellCurve(x, 1000, 422500, 10)
+    iy = calcBellCurve(y, 1000, 422500, 10)
+    if ix > z and iy > z:
+        return 'ruby'
+    ix += calcBellCurve(x, 1000, 1200000, 20)
+    iy += calcBellCurve(y, 1000, 1200000, 20)
+    if ix > z and iy > z:
+        return 'iron'
+    ix += calcBellCurve(x, 1000, 3240000, 50)
+    iy += calcBellCurve(y, 1000, 3240000, 50)
+    if ix > z and iy > z:
+        return 'stone'
+    return 'wood'
+
+
+def dist(x1, y1, x2, y2):
+    dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    return dist
+
+
 if __name__ == '__main__':
-    print('[SERVER] started')
+    print('[SERVER] Server started')
     players = {}
     mapWidth = 2000
     mapHeight = 2000
@@ -192,12 +218,27 @@ if __name__ == '__main__':
 
     print('[SERVER] Generating terrain...')
     objects = []
-    for i in range(0, 10000):
-        objects.append(Object(
-            random.choice(list(objectTypes.keys())),
-            random.uniform(0, mapWidth),
-            random.uniform(0, mapHeight)
-        ))
+    for i in range(0, 8000):
+        if i % 400 == 0:
+            # print('[SERVER] Generating Terrain: ', i/80, '% [', '█'*int(i/400),'*'*(20-int(i/400)), ']')
+            print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
+        x = random.uniform(0, mapWidth)
+        y = random.uniform(0, mapHeight)
+        closeLimit = False
+        for o in objects:
+            if Vector(x - o.x, y - o.y).len() < 6:
+                closeLimit = True
+        if not closeLimit:
+            if random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and random.uniform(0, 1) < calcBellCurve(y,
+                                                                                                                  1000,
+                                                                                                                  1000000,
+                                                                                             1):
+                objects.append(Object(
+                    getRandomObject(x, y),
+                    x,
+                    y
+                ))
+
     # objects.append(Object('wood', 40, 40))
     # objects.append(Object('ruby', 30, 49))
     print('[SERVER] Terrain generation complete')
