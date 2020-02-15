@@ -214,24 +214,24 @@ if __name__ == '__main__':
 
     # Terrain generation
     print('[SERVER] Generating terrain...')
-#     Good new terrain
-#     for i in range(0, 8000):
-#         if i % 400 == 0:
-#             print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
-#         x = random.uniform(0, mapWidth)
-#         y = random.uniform(0, mapHeight)
-#         closeLimit = False
-#         for o in objects:
-#             if Vector(x - o.x, y - o.y).len() < 6:
-#                 closeLimit = True
-#         if not closeLimit:
-#             if (random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and
-#                     random.uniform(0, 1) < calcBellCurve(y, 1000, 1000000, 1)):
-#                 objects.append(Object(
-#                     getRandomObject(x, y),
-#                     x,
-#                     y
-#                 ))
+#   Good new terrain
+#   for i in range(0, 8000):
+#       if i % 400 == 0:
+#           print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
+#       x = random.uniform(0, mapWidth)
+#       y = random.uniform(0, mapHeight)
+#       closeLimit = False
+#       for o in objects:
+#           if Vector(x - o.x, y - o.y).len() < 6:
+#               closeLimit = True
+#       if not closeLimit:
+#           if (random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and
+#                   random.uniform(0, 1) < calcBellCurve(y, 1000, 1000000, 1)):
+#               objects.append(Object(
+#                   getRandomObject(x, y),
+#                   x,
+#                   y
+#               ))
     # Bad old terrain - used for testing
     for i in range(0, 10000):
         objects.append(Object(
