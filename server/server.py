@@ -193,7 +193,8 @@ def getRandomObject(x, y):
     return 'wood'
 
 if __name__ == '__main__':
-    print('[SERVER] Server started')
+    print('[SERVER] Server initializing...')
+    objects = []
     players = {}
     mapWidth = 2000
     mapHeight = 2000
@@ -205,31 +206,39 @@ if __name__ == '__main__':
         'ruby': 5
     }
 
+    # Loading files
     with open('filter.json', 'r') as filtersFile:
         filters = json.load(filtersFile)
     with open('emotes.json', 'r') as emotesFile:
         emotes = json.load(emotesFile)
 
+    # Terrain generation
     print('[SERVER] Generating terrain...')
-    objects = []
-    for i in range(0, 8000):
-        if i % 400 == 0:
-            # print('[SERVER] Generating Terrain: ', i/80, '% [', '█'*int(i/400),'*'*(20-int(i/400)), ']')
-            print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
-        x = random.uniform(0, mapWidth)
-        y = random.uniform(0, mapHeight)
-        closeLimit = False
-        for o in objects:
-            if Vector(x - o.x, y - o.y).len() < 6:
-                closeLimit = True
-        if not closeLimit:
-            if (random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and
-                    random.uniform(0, 1) < calcBellCurve(y, 1000, 1000000, 1)):
-                objects.append(Object(
-                    getRandomObject(x, y),
-                    x,
-                    y
-                ))
+#     Good new terrain
+#     for i in range(0, 8000):
+#         if i % 400 == 0:
+#             print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
+#         x = random.uniform(0, mapWidth)
+#         y = random.uniform(0, mapHeight)
+#         closeLimit = False
+#         for o in objects:
+#             if Vector(x - o.x, y - o.y).len() < 6:
+#                 closeLimit = True
+#         if not closeLimit:
+#             if (random.uniform(0, 1) < calcBellCurve(x, 1000, 1000000, 1) and
+#                     random.uniform(0, 1) < calcBellCurve(y, 1000, 1000000, 1)):
+#                 objects.append(Object(
+#                     getRandomObject(x, y),
+#                     x,
+#                     y
+#                 ))
+    # Bad old terrain - used for testing
+    for i in range(0, 10000):
+        objects.append(Object(
+            random.choice(list(objectTypes.keys())),
+            random.uniform(0, mapWidth),
+            random.uniform(0, mapHeight)
+        ))
 
     print('[SERVER] Terrain generation complete')
 

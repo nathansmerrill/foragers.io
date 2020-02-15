@@ -167,7 +167,6 @@ function resizeResourceDisplay() {
 function resizeHealthDisplay() {
     tuning['healthHeight'] = IGUToPixels(1);
     tuning['healthY'] = IGUToPixels(2.8, innerHeight);
-
 }
 
 function resizeChat() {

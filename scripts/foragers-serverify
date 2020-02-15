@@ -10,6 +10,9 @@ sed -i 's/localhost:4000/cs.catlin.edu:8020/' public/sketch.js
 sed -ie '/staticFiles = {/,+3 s/^/# /' server/server.py
 # Don't serve static files when creating Server
 sed -i 's/, static_files=staticFiles//' server/server.py
+# Switch to better, slower terrain gen
+sed -ie '/Bad old terrain - used for testing/,+6 s/^/# /' server/server.py
+sed -ie '/Good new terrain/,+17 s/^#/ /' server/server.py
 # Since in the production environment the project is run from the project root,
 # the paths of files to read need to be relative to the it
 sed -i "s/filter.json/server\/filter.json/" server/server.py
