@@ -242,4 +242,4 @@ if __name__ == '__main__':
 
     print('[SERVER] Terrain generation complete')
 
-    eventlet.wsgi.server(eventlet.listen(('', 4000)), app)
+    eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_format='%(client_ip)s disconnected...')
