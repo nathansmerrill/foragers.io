@@ -1,5 +1,7 @@
 #!/usr/bin/python3 -u
 
+from datetime import datetime
+from staticon import Level, sprint
 import socketio, eventlet
 import random, json, time, math
 
@@ -86,7 +88,7 @@ def currentTimeMillis():
 
 @sio.event
 def connect(sid, environ):
-    print('[CONNECT] ' + sid)
+    sprint(Level.INFO, f'[CONNECT] {sid}', True)
     sio.emit('objects', [object.getDict() for object in objects], to=sid)
     sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' ' +
                    ('player' if len(players) == 1 else 'players')
@@ -98,7 +100,7 @@ def connect(sid, environ):
 
 @sio.event
 def disconnect(sid):
-    print('[DISCONNECT] ' + sid)
+    sprint(Level.INFO, f'[DISCONNECT] {sid}', True)
     players.pop(sid, None)
     sio.emit('leave', sid)
 
@@ -148,7 +150,7 @@ def inputs(sid, data):
 
 @sio.event
 def chat(sid, data):
-    print('[CHAT] ' + sid + ': ' + data)
+    sprint(Level.INFO, f'[CHAT] {sid}: {data}', True)
     if '<' in data and '>' in data:
         sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
         return
@@ -192,7 +194,7 @@ def getRandomObject(x, y):
     return 'wood'
 
 if __name__ == '__main__':
-    print('[SERVER] Server initializing...')
+    sprint(Level.SUCCESS, '[SERVER] Server initializing...', True)
     objects = []
     players = {}
     mapWidth = 2000
@@ -212,11 +214,11 @@ if __name__ == '__main__':
         emotes = json.load(emotesFile)
 
     # Terrain generation
-    print('[SERVER] Generating terrain...')
+    sprint(Level.INFO, '[SERVER] Generating terrain...', True)
 #   Good new terrain
 #   for i in range(0, 8000):
 #       if i % 400 == 0:
-#           print(f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]')
+#           sprint(Level.INFO, f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]', True)
 #       x = random.uniform(0, mapWidth)
 #       y = random.uniform(0, mapHeight)
 #       closeLimit = False
@@ -239,6 +241,6 @@ if __name__ == '__main__':
             random.uniform(0, mapHeight)
         ))
 
-    print('[SERVER] Terrain generation complete')
+    sprint(Level.SUCCESS, '[SERVER] Terrain generation complete', True)
 
     eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_format='%(client_ip)s disconnected...')
