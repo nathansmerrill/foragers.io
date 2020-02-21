@@ -175,7 +175,6 @@ def chat(sid, data):
 
     sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
 
-
 def getRandomObject(x, y):
     z = random.uniform(0, 100)
     ix = calcBellCurve(x, 1000, 422500, 10)
