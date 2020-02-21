@@ -1,7 +1,6 @@
 #!/usr/bin/python3 -u
 
 from datetime import datetime
-from staticon import Level, sprint
 import socketio, eventlet
 import random, json, time, math
 
@@ -86,9 +85,19 @@ def currentTimeMillis():
     # return int(round(time.time() * 1000))
     return time.time() * 1000
 
+def sprint(tag, message, timestamp=True):
+    out = '['
+    out += tag
+    if timestamp:
+        out += ' '
+        out += datetime.now().strftime("%d-%b-%Y %-I:%M:%S %p")
+    out += '] '
+    out += message
+    print(out)
+
 @sio.event
 def connect(sid, environ):
-    sprint(Level.INFO, f'[CONNECT] {sid}', True)
+    sprint('CONNECT', sid)
     sio.emit('objects', [object.getDict() for object in objects], to=sid)
     sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' ' +
                    ('player' if len(players) == 1 else 'players')
@@ -100,7 +109,7 @@ def connect(sid, environ):
 
 @sio.event
 def disconnect(sid):
-    sprint(Level.INFO, f'[DISCONNECT] {sid}', True)
+    sprint('DISCONNECT', sid)
     players.pop(sid, None)
     sio.emit('leave', sid)
 
@@ -150,7 +159,7 @@ def inputs(sid, data):
 
 @sio.event
 def chat(sid, data):
-    sprint(Level.INFO, f'[CHAT] {sid}: {data}', True)
+    sprint('CHAT', f'{sid}: {data}')
     if '<' in data and '>' in data:
         sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
         return
@@ -194,7 +203,7 @@ def getRandomObject(x, y):
     return 'wood'
 
 if __name__ == '__main__':
-    sprint(Level.SUCCESS, '[SERVER] Server initializing...', True)
+    sprint('SERVER', 'Server initializing...')
     objects = []
     players = {}
     mapWidth = 2000
@@ -214,11 +223,11 @@ if __name__ == '__main__':
         emotes = json.load(emotesFile)
 
     # Terrain generation
-    sprint(Level.INFO, '[SERVER] Generating terrain...', True)
+    sprint('SERVER', 'Generating terrain...')
 #   Good new terrain
 #   for i in range(0, 8000):
 #       if i % 400 == 0:
-#           sprint(Level.INFO, f'[SERVER] Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]', True)
+#           sprint('SERVER', f'Generating Terrain: {i / 80}% [{"█" * int(i / 400)}{"." * (20 - int(i / 400))}]',)
 #       x = random.uniform(0, mapWidth)
 #       y = random.uniform(0, mapHeight)
 #       closeLimit = False
@@ -241,6 +250,6 @@ if __name__ == '__main__':
             random.uniform(0, mapHeight)
         ))
 
-    sprint(Level.SUCCESS, '[SERVER] Terrain generation complete', True)
+    sprint('SERVER', 'Terrain generation complete')
 
     eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_format='%(client_ip)s disconnected...')
