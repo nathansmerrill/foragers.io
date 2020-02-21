@@ -224,6 +224,7 @@ if __name__ == '__main__':
 
     # Terrain generation
     sprint('SERVER', 'Generating terrain...')
+    terrainGenStarted = currentTimeMillis()
 #   Good new terrain
 #   for i in range(0, 8000):
 #       if i % 400 == 0:
@@ -250,6 +251,6 @@ if __name__ == '__main__':
             random.uniform(0, mapHeight)
         ))
 
-    sprint('SERVER', 'Terrain generation complete')
+    sprint('SERVER', f'Terrain generation complete ({round(((currentTimeMillis() - terrainGenStarted) / 1000), 2)}s)')
 
     eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_format='%(client_ip)s disconnected...')
