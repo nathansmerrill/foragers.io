@@ -99,13 +99,11 @@ def sprint(tag, message, timestamp=True):
 def connect(sid, environ):
     sprint('CONNECT', sid)
     sio.emit('objects', [object.getDict() for object in objects], to=sid)
-    sio.emit('display', '<strong>Welcome. ' + str(len(players)) + ' ' +
-                   ('player' if len(players) == 1 else 'players')
-                   + ' online', to=sid)
-    sio.emit('display', '<strong>' + sid + '</strong> joined', skip_sid=sid)
+    sio.emit('display', f'<strong>Welcome. {str(len(players))} {("player" if len(players) == 1 else "players")} online', to=sid)
+    sio.emit('display', f'<strong>{sid}</strong> joined', skip_sid=sid)
     if ('420' in sid) or ('69' in sid):
         sio.emit('display', 'Nice')
-    players[sid] = Player('Player ' + sid, sid)
+    players[sid] = Player(f'Player {sid}', sid)
 
 @sio.event
 def disconnect(sid):
@@ -161,7 +159,7 @@ def inputs(sid, data):
 def chat(sid, data):
     sprint('CHAT', f'{sid}: {data}')
     if '<' in data and '>' in data:
-        sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + '</strong> is a M1G H4CK3R 0110100100</span>')
+        sio.emit('display', f'<span class=\"chat-line\"><strong>{sid}</strong> is a M1G H4CK3R 0110100100</span>')
         return
     splitMessage = data.split()
     # Chat filter
@@ -182,9 +180,9 @@ def chat(sid, data):
                     emoteImage = emote[2]
                 else:
                     emoteImage = emote[0]
-                splitMessage[i] = "<img class='chat-emote' src='/static/assets/img/emotes/" + emoteImage + "." + emote[1] + "'>"
+                splitMessage[i] = f"<img class='chat-emote' src='/static/assets/img/emotes/{emoteImage}.{emote[1]}'>"
 
-    sio.emit('display', '<span class=\"chat-line\"><strong>' + sid + ': </strong>' + ' '.join(splitMessage) + '</span>')
+    sio.emit('display', f'<span class=\"chat-line\"><strong>{sid}:</strong> {" ".join(splitMessage)}</span>')
 
 def getRandomObject(x, y):
     z = random.uniform(0, 100)
