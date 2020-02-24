@@ -70,7 +70,6 @@ class Player:
     def getDict(self):
         return self.__dict__
 
-
 def calcBellCurve(x, offset, width, height):
     return height * math.exp(-(math.pow(x - offset, 2) / (width)))
 
