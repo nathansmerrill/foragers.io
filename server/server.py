@@ -253,4 +253,5 @@ if __name__ == '__main__':
 
     sprint('SERVER', f'Terrain generation complete ({round(((currentTimeMillis() - terrainGenStarted) / 1000), 2)}s)')
 
-    eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_format='%(client_ip)s disconnected... /\\')
+#   eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_format='%(client_ip)s disconnected... /\\')
+    eventlet.wsgi.server(eventlet.listen(('', 4000)), app, log_output=False)

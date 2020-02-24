@@ -13,6 +13,9 @@ sed -i 's/, static_files=staticFiles//' server/server.py
 # Switch to better, slower terrain gen
 sed -ie '/for i in range(0, 8000):/,+17 s/^#/ /' server/server.py
 sed -ie '/Bad old terrain - used for testing/,+6 s/^/# /' server/server.py
+# Turn on eventlet logging
+sed -ie "/log_format=/,+0 s/^#/ /" server/server.py
+sed -ie '/log_output=False/,+0 s/^/# /' server/server.py
 # Since in the production environment the project is run from the project root,
 # the paths of files to read need to be relative to the it
 sed -i "s/filter.json/server\/filter.json/" server/server.py
